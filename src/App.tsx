@@ -2,13 +2,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { getAuthUrl, fetchAccessToken } from './api/auth';
-
-const StartPage: React.FC = () => (
-    <div>
-        <h1>Welcome to the App</h1>
-        <p>Your access token is: {localStorage.getItem('access_token')}</p>
-    </div>
-);
+import { StartPage } from './components/StartPage';
 
 const App: React.FC = () => {
     const navigate = useNavigate();

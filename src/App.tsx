@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { getAuthUrl, fetchAccessToken } from './api/auth';
 import { StartPage } from './components/StartPage';
+import { BracketPage } from './components/BracketPage';
+import { MatchPage } from './components/MatchPage';
+import { VictoryPage } from './components/VictoryPage';
 
 const App: React.FC = () => {
     const navigate = useNavigate();
@@ -27,6 +30,9 @@ const App: React.FC = () => {
     return (
         <Routes>
             <Route path="/start" element={<StartPage />} />
+            <Route path="/bracket" element={<BracketPage />} />
+            <Route path="/match" element={<MatchPage />} />
+            <Route path="/victory" element={<VictoryPage />} />
             <Route path="*" element={<Navigate to="/start" replace />} />
         </Routes>
     );

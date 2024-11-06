@@ -25,7 +25,7 @@ export const StartPage: React.FC = () => {
     }, [accessToken]);
 
     const handleGenerateBracket = () => {
-        navigate('/new-bracket', { state: { title, contestantNumber } });
+        navigate('/bracket', { state: { title, contestantNumber } });
     };
 
     return (

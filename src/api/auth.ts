@@ -20,3 +20,14 @@ export const fetchAccessToken = async (code: string): Promise<any> => {
     const response = await axios.post('http://localhost:3000/api/token', { code });
     return response.data;
 };
+
+export const refreshAccessToken = async (refreshToken: string): Promise<any> => {
+    const response = await axios.post('http://localhost:3000/api/refresh_token', { refresh_token: refreshToken });
+    return response.data;
+};
+
+export const isTokenExpired = (): boolean => {
+    const tokenExpiry = localStorage.getItem('token_expiry');
+    if (!tokenExpiry) return true;
+    return new Date().getTime() > parseInt(tokenExpiry, 10);
+};

@@ -22,6 +22,10 @@ interface TokenRequestBody {
   code: string;
 }
 
+interface RefreshTokenRequestBody {
+  refresh_token: string;
+}
+
 const fetchAccessToken = async (code: string): Promise<any> => {
   try {
     const response = await axios.post(
@@ -50,6 +54,32 @@ const fetchAccessToken = async (code: string): Promise<any> => {
   }
 };
 
+const refreshAccessToken = async (refreshToken: string) => {
+  try {
+    const response = await axios.post(TOKEN_URL, 
+      qs.stringify({
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Error refreshing access token:', error.response ? error.response.data : error.message);
+    } else {
+      console.error('Error refreshing access token:', (error as Error).message);
+    }
+    throw new Error(error instanceof Error ? error.message : 'An error occurred');
+  }
+};
+
 app.post('/api/token', async (req: Request<{}, {}, TokenRequestBody>, res: Response) => {
   const { code } = req.body;
 
@@ -58,6 +88,18 @@ app.post('/api/token', async (req: Request<{}, {}, TokenRequestBody>, res: Respo
     res.json(data);
   } catch (error) {
     console.error('Error in /api/token route:', (error as Error).message);
+    res.status(500).send({ message: 'An unexpected error occurred', error: (error as Error).message });
+  }
+});
+
+app.post('/api/refresh_token', async (req: Request<{}, {}, RefreshTokenRequestBody>, res: Response) => {
+  const { refresh_token } = req.body;
+
+  try {
+    const data = await refreshAccessToken(refresh_token);
+    res.json(data);
+  } catch (error) {
+    console.error('Error in /api/refresh_token route:', (error as Error).message);
     res.status(500).send({ message: 'An unexpected error occurred', error: (error as Error).message });
   }
 });

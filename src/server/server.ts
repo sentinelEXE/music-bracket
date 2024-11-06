@@ -4,7 +4,6 @@ import axios from 'axios';
 import qs from 'qs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 import { dirname } from 'path';
 
 // Convert __dirname to ES module equivalent

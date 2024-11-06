@@ -21,7 +21,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node --loader ts-node/esm src/server/server.ts\"",
+    "start": "npm run build && concurrently \"react-scripts start\" \"node --loader ts-node/esm src/server/server.ts\"",
     "dev": "node --loader ts-node/esm src/server/server.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",

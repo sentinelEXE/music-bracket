@@ -1,9 +1,10 @@
-// src/components/App.tsx
+// src/components/StartPage.tsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Playlist } from '../types/types';
 import { setSelectedPlaylist } from '../store/store';
+import '../styles/StartPage.css';
 
 export const StartPage: React.FC = () => {
     const accessToken = localStorage.getItem('access_token');
@@ -52,7 +53,7 @@ export const StartPage: React.FC = () => {
     }, [selectedPlaylist, contestantNumber]);
 
     return (
-        <div>
+        <div className='StartPage'>
             <h1>Welcome to Music Bracket</h1>
             <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Bracket title'/>
             <br/>

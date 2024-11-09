@@ -43,6 +43,7 @@ export interface AppState {
     selectedPlaylist: Playlist | null;
     songs: Song[];
     bracket: Bracket | null;
+    contestantNumber: number;
   }
 
 export interface Image {

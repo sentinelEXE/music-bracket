@@ -3,14 +3,14 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Playlist } from '../types/types';
-import { setSelectedPlaylist } from '../store/store';
+import { setSelectedPlaylist, setContestantNumber } from '../store/store';
 import '../styles/StartPage.css';
 
 export const StartPage: React.FC = () => {
     const accessToken = localStorage.getItem('access_token');
     const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
-    const [contestantNumber, setContestantNumber] = useState<number>(2);
+    const [contestantNumber, setContestantNumberState] = useState<number>(2);
     const [playlists, setPlaylists] = useState<any[]>([]);
     const [selectedPlaylist, setSelectedPlaylistState] = useState<Playlist | null>();
 
@@ -32,6 +32,7 @@ export const StartPage: React.FC = () => {
     const handleGenerateBracket = () => {
         if (selectedPlaylist) {
           dispatch(setSelectedPlaylist(selectedPlaylist));
+          dispatch(setContestantNumber(contestantNumber));
           navigate('/bracket');
         }
       };
@@ -60,7 +61,7 @@ export const StartPage: React.FC = () => {
             <label htmlFor="contestantNumber">Select number of songs:</label>
             <select 
                 value={contestantNumber} 
-                onChange={(e) => setContestantNumber(Number(e.target.value))}
+                onChange={(e) => setContestantNumberState(Number(e.target.value))}
             >
                 {[2, 4, 8, 16, 32, 64, 128].map(num => (
                     <option key={num} value={num}>{num}</option>

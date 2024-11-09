@@ -8,12 +8,14 @@ const initialState: AppState = {
   selectedPlaylist: null,
   songs: [],
   bracket: null,
+  contestantNumber: 2,
 };
 
 // Define action types
 const SET_SELECTED_PLAYLIST = 'SET_SELECTED_PLAYLIST';
 const SET_SONGS = 'SET_SONGS';
 const SET_BRACKET = 'SET_BRACKET';
+const SET_CONTESTANT_NUMBER = 'SET_CONTESTANT_NUMBER';
 
 // Define action creators
 export const setSelectedPlaylist = (playlist: Playlist) => ({
@@ -29,6 +31,11 @@ export const setSongs = (songs: Song[]) => ({
 export const setBracket = (bracket: Bracket) => ({
   type: SET_BRACKET,
   payload: bracket,
+});
+
+export const setContestantNumber = (number: number) => ({
+  type: SET_CONTESTANT_NUMBER,
+  payload: number,
 });
 
 // Define reducers
@@ -59,10 +66,20 @@ const bracketReducer = (state = initialState.bracket, action: any) => {
   }
 };
 
+const contestantNumberReducer = (state = initialState.contestantNumber, action: any) => {
+  switch (action.type) {
+    case SET_CONTESTANT_NUMBER:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   selectedPlaylist: selectedPlaylistReducer,
   songs: songsReducer,
   bracket: bracketReducer,
+  contestantNumber: contestantNumberReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

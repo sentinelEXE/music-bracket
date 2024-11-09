@@ -33,19 +33,19 @@ export const BracketPage: React.FC = () => {
 
     return (
         <div>
-        <h1>Bracket Page</h1>
-        {selectedPlaylist ? (
-            <div>
-            <h2>{selectedPlaylist.name}</h2>
-            <ul>
-                {songs.map((song) => (
-                <li key={song.id}>{song.name} by {song.artists.map(artist => artist.name).join(', ')}</li>
-                ))}
-            </ul>
-            </div>
-        ) : (
-            <p>No playlist selected</p>
-        )}
+            <h1>Bracket Page</h1>
+            {selectedPlaylist ? (
+                <div>
+                <h2>{selectedPlaylist.name}</h2>
+                <ul>
+                    {songs.map((song) => (
+                    <li key={song.id}>{song.name} by {song.artists.map(artist => artist.name).join(', ')}</li>
+                    ))}
+                </ul>
+                </div>
+            ) : (
+                <p>No playlist selected</p>
+            )}
         </div>
     );
 };

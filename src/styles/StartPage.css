@@ -7,3 +7,26 @@
     justify-content: center;
     height: 100vh;
 }
+
+.StartPage input[type='text'] {
+    background-color: #f9f9f9;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    color: #000;
+    font-size: 25px;
+    height: 25px;
+    width: 175px;
+    padding: 5px;
+}
+
+.StartPage input[type='text']:focus {
+    border-color: #85c6dc;
+}
+
+.StartPage input[type='text']::placeholder {
+    color: #333;
+    font-style: italic;
+    text-align: center;
+}
+
+

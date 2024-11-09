@@ -1,13 +1,17 @@
 // src/components/App.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Playlist } from '../types/types';
+import { setSelectedPlaylist } from '../store/store';
 
 export const StartPage: React.FC = () => {
     const accessToken = localStorage.getItem('access_token');
+    const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
     const [contestantNumber, setContestantNumber] = useState<number>(2);
     const [playlists, setPlaylists] = useState<any[]>([]);
-    const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
+    const [selectedPlaylist, setSelectedPlaylistState] = useState<Playlist | null>();
 
     const navigate = useNavigate();
 
@@ -25,8 +29,27 @@ export const StartPage: React.FC = () => {
     }, [accessToken]);
 
     const handleGenerateBracket = () => {
-        navigate('/bracket', { state: { title, contestantNumber } });
+        if (selectedPlaylist) {
+          dispatch(setSelectedPlaylist(selectedPlaylist));
+          navigate('/bracket');
+        }
+      };
+    
+    const handlePlaylistChange = (playlist: Playlist) => {
+        setSelectedPlaylistState(playlist);
     };
+
+    const errorMessage = useMemo(() => {
+        if (selectedPlaylist?.tracks && selectedPlaylist.tracks.total < contestantNumber) {
+            return "This playlist does not have enough songs to start a bracket."
+        }
+        else if (!selectedPlaylist) {
+            return "Please select a playlist."
+        }
+        else {
+            return "";
+        }
+    }, [selectedPlaylist, contestantNumber]);
 
     return (
         <div>
@@ -46,15 +69,20 @@ export const StartPage: React.FC = () => {
             <label htmlFor="playlist">Select a playlist:</label>
             <select 
                 id="playlist"
-                value={selectedPlaylist} 
-                onChange={(e) => setSelectedPlaylist(e.target.value)}
+                value={selectedPlaylist?.id} 
+                onChange={(e) => {
+                    const playlist = playlists.find(p => p.id === e.target.value);
+                    if (playlist) handlePlaylistChange(playlist);
+                  }}
             >
                 {playlists.map(playlist => (
                     <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
                 ))}
             </select>
             <br/>
-            <button onClick={handleGenerateBracket}>Generate Bracket</button>
+            {errorMessage && <p>{errorMessage}</p>}
+            <br/>
+            <button disabled={errorMessage !== ""} onClick={handleGenerateBracket}>Generate Bracket</button>
         </div>
     )
 };

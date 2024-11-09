@@ -70,12 +70,13 @@ export const StartPage: React.FC = () => {
             <label htmlFor="playlist">Select a playlist:</label>
             <select 
                 id="playlist"
-                value={selectedPlaylist?.id} 
+                value={selectedPlaylist?.id || ""} 
                 onChange={(e) => {
                     const playlist = playlists.find(p => p.id === e.target.value);
                     if (playlist) handlePlaylistChange(playlist);
                   }}
             >
+                <option value="" disabled>Select a playlist</option>
                 {playlists.map(playlist => (
                     <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
                 ))}

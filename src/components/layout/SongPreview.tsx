@@ -1,3 +1,4 @@
+// src/components/layouts/SongPreview.tsx
 import React from 'react';
 import { Song } from '../../types/types';
 

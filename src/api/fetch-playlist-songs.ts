@@ -1,4 +1,4 @@
-// src/fetch-playlist-songs.ts
+// src/api/fetch-playlist-songs.ts
 import { Song } from '../types/types';
 
 const fetchPlaylistSongs = async (playlistId: string, accessToken: string): Promise<Song[]> => {

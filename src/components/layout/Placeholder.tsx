@@ -1,4 +1,4 @@
-// src/components/Placeholder.tsx
+// src/components/layout/Placeholder.tsx
 import React from 'react';
 
 interface PlaceholderProps {

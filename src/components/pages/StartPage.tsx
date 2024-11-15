@@ -1,4 +1,4 @@
-// src/components/StartPage.tsx
+// src/components/pages/StartPage.tsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

@@ -1,3 +1,4 @@
+// src/components/pages/VictoryPage.tsx
 import React from 'react';
 
 export const VictoryPage: React.FC = () => {

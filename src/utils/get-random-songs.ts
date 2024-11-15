@@ -1,3 +1,4 @@
+// src/utils/get-random-songs.ts
 import { Song } from "../types/types";
 
 export const getRandomSongs = (songs: Song[], count: number): Song[] => {

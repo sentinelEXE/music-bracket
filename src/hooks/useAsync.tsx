@@ -1,4 +1,4 @@
-// src/hooks/useAsync.ts
+// src/hooks/useAsync.tsx
 import { useState, useEffect } from 'react';
 import Placeholder from '../components/layout/Placeholder';
 

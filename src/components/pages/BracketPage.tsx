@@ -1,4 +1,4 @@
-// src/components/BracketPage.tsx
+// src/components/pages/BracketPage.tsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Playlist, Song } from '../../types/types';
@@ -29,23 +29,23 @@ export const BracketPage: React.FC = () => {
       });
 
     return (
-        <div>
-      <h1>Bracket Page</h1>
-      {selectedPlaylist ? (
-        <PlaceholderComponent>
-          <h2>{selectedPlaylist.name}</h2>
-          <ul>
-            {songs?.map((song) => (
-              <li key={song.id}>
-                {song.name} by {song.artists.map(artist => artist.name).join(', ')}
-                
-              </li>
-            ))}
-          </ul>
-        </PlaceholderComponent>
-      ) : (
-        <p>No playlist selected</p>
-      )}
+      <div>
+        <h1>Bracket Page</h1>
+        {selectedPlaylist ? (
+          <PlaceholderComponent>
+            <h2>{selectedPlaylist.name}</h2>
+            <ul>
+              {songs?.map((song) => (
+                <li key={song.id}>
+                  {song.name} by {song.artists.map(artist => artist.name).join(', ')}
+                  
+                </li>
+              ))}
+            </ul>
+          </PlaceholderComponent>
+        ) : (
+          <p>No playlist selected</p>
+        )}
     </div>
     );
 };

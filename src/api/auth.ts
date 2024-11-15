@@ -17,12 +17,12 @@ export const getAuthUrl = (): string => {
 };
 
 export const fetchAccessToken = async (code: string): Promise<any> => {
-    const response = await axios.post('http://localhost:3000/api/token', { code });
+    const response = await axios.post('/api/token', { code });
     return response.data;
 };
 
 export const refreshAccessToken = async (refreshToken: string): Promise<any> => {
-    const response = await axios.post('http://localhost:3000/api/refresh_token', { refresh_token: refreshToken });
+    const response = await axios.post('/api/refresh_token', { refresh_token: refreshToken });
     return response.data;
 };
 

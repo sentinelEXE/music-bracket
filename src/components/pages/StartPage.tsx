@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Playlist } from '../types/types';
-import { setSelectedPlaylist, setContestantNumber } from '../store/store';
-import '../styles/StartPage.css';
+import { Playlist } from '../../types/types';
+import { setSelectedPlaylist, setContestantNumber } from '../../store/store';
+import '../../styles/StartPage.css';
 
 export const StartPage: React.FC = () => {
     const accessToken = localStorage.getItem('access_token');

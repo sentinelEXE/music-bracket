@@ -2,10 +2,10 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { getAuthUrl, fetchAccessToken, isTokenExpired, refreshAccessToken } from './api/auth';
-import { StartPage } from './components/StartPage';
-import { BracketPage } from './components/BracketPage';
-import { MatchPage } from './components/MatchPage';
-import { VictoryPage } from './components/VictoryPage';
+import { StartPage } from './components/pages/StartPage';
+import { BracketPage } from './components/pages/BracketPage';
+import { MatchPage } from './components/pages/MatchPage';
+import { VictoryPage } from './components/pages/VictoryPage';
 
 const App: React.FC = () => {
     const navigate = useNavigate();

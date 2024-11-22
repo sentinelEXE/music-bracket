@@ -14,6 +14,7 @@ export interface Song {
     popularity: number;
     href: string;
     preview_url: string;
+    uri: string;
 }
 
 export interface Artist {

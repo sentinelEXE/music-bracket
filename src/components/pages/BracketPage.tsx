@@ -1,8 +1,8 @@
 // src/components/pages/BracketPage.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Playlist, Song } from '../../types/types';
-import fetchPlaylistSongs from '../../api/fetch-playlist-songs';
+import { fetchPlaylistSongs } from '../../api/fetch-playlist-songs';
 import { getRandomSongs } from '../../utils/get-random-songs';
 import { setSongs } from '../../store/store';
 import { useAsync } from '../../hooks/useAsync';
@@ -27,7 +27,7 @@ export const BracketPage: React.FC = () => {
           console.error('Error fetching playlist details:', err);
         },
       });
-
+      
     return (
       <div>
         <h1>Bracket Page</h1>
@@ -46,6 +46,7 @@ export const BracketPage: React.FC = () => {
         ) : (
           <p>No playlist selected</p>
         )}
+      <a href="/match">Start Bracket</a>
     </div>
     );
 };

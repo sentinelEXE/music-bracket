@@ -1,7 +1,9 @@
 // src/store/store.ts
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import {thunk} from 'redux-thunk';
+import { thunk, ThunkMiddleware } from 'redux-thunk';
 import { AppState, Playlist, Song, Bracket } from '../types/types';
+import localStorageMiddleware from './localStorageMiddleware';
+import { loadState } from './loadState';
 
 // Define initial state
 const initialState: AppState = {
@@ -82,6 +84,12 @@ const rootReducer = combineReducers({
   contestantNumber: contestantNumberReducer,
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const persistedState = loadState();
+
+const store = createStore(
+  rootReducer,
+  persistedState,
+  applyMiddleware(thunk as ThunkMiddleware<AppState>, localStorageMiddleware)
+);
 
 export default store;

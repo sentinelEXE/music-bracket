@@ -20,6 +20,7 @@ export function useAsync<T>({ fetchFunction, params, onSuccess, onFailure }: Use
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
+  const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +29,10 @@ export function useAsync<T>({ fetchFunction, params, onSuccess, onFailure }: Use
       try {
         const result = await fetchFunction(...params);
         setData(result);
-        onSuccess(result);
+        if (!hasFetched) {
+          onSuccess(result);
+          setHasFetched(true);
+        }
       } catch (err) {
         setError(err);
         onFailure(err);
@@ -37,8 +41,8 @@ export function useAsync<T>({ fetchFunction, params, onSuccess, onFailure }: Use
       }
     };
 
-    if (!data) fetchData();
-  }, [fetchFunction, params, data, loading, onSuccess, onFailure]);
+    fetchData();
+  }, []);
 
   const PlaceholderComponent: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <Placeholder loading={loading} error={error}>

@@ -7,7 +7,7 @@ const REDIRECT_URI = 'http://localhost:3000/start';
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 
 export const getAuthUrl = (): string => {
-    const scopes = 'user-read-private user-read-email playlist-modify-public'; // Add required scopes
+    const scopes = 'user-read-private user-read-email playlist-modify-public';
     return `${AUTH_URL}?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,

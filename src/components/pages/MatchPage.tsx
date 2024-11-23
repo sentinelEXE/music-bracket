@@ -1,7 +1,7 @@
 // src/components/pages/MatchPage.tsx
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Playlist, Song } from '../../types/types';
+import { Song } from '../../types/types';
 import { getRandomSongs } from '../../utils/get-random-songs';
 
 declare global {
@@ -23,47 +23,33 @@ export const MatchPage: React.FC = () => {
       }
     }, [songs]);
 
-    window.onSpotifyIframeApiReady = (IFrameAPI) => {
-        const element = document.getElementById('song1');
-        const options = {
+    useEffect(() => {
+      if (selectedSongs.length === 2) {
+        window.onSpotifyIframeApiReady = (IFrameAPI) => {
+          const element1 = document.getElementById('song1');
+          const element2 = document.getElementById('song2');
+          const options1 = {
             uri: selectedSongs[0].uri
           };
-        const callback = (EmbedController: any) => {};
-        IFrameAPI.createController(element, options, callback);
-      };
+          const options2 = {
+            uri: selectedSongs[1].uri
+          };
+          const callback = (EmbedController: any) => {
+            console.log('EmbedController:', EmbedController);
+          };
+          IFrameAPI.createController(element1, options1, callback);
+          IFrameAPI.createController(element2, options2, callback);
+        };
+      }
+    }, [selectedSongs]);
   
     return (
       <div>
-        <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
         <h1>Match Page</h1>
         {selectedSongs.length === 2 ? (
           <div>
-            <div>
-              <h2>{selectedSongs[0].name}</h2>
-              <p>by {selectedSongs[0].artists.map(artist => artist.name).join(', ')}</p>
-              {selectedSongs[0].preview_url && (
-                <iframe
-                  title='song1'
-                  id='song1'
-                  width="300"
-                  height="80"
-                  allow="encrypted-media"
-                ></iframe>
-              )}
-            </div>
-            <div>
-              <h2>{selectedSongs[1].name}</h2>
-              <p>by {selectedSongs[1].artists.map(artist => artist.name).join(', ')}</p>
-              {selectedSongs[1].preview_url && (
-                <iframe
-                  title='song2'
-                  id='song2'
-                  width="300"
-                  height="80"
-                  allow="encrypted-media"
-                ></iframe>
-              )}
-            </div>
+            {selectedSongs[0].uri && <div id='song1'/>}
+            {selectedSongs[1].uri && <div id='song2'/>}
           </div>
         ) : (
           <p>Loading...</p>

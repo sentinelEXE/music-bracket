@@ -15,12 +15,16 @@ const App: React.FC = () => {
         const code = urlParams.get('code');
 
         const handleToken = async () => {
-            if (code) {
-                const data = await fetchAccessToken(code);
-                localStorage.setItem('access_token', data.access_token);
-                localStorage.setItem('refresh_token', data.refresh_token);
-                localStorage.setItem('token_expiry', (new Date().getTime() + data.expires_in * 1000).toString());
-                navigate('/start');
+            if (code && !localStorage.getItem('access_token')) {
+                try {
+                  const data = await fetchAccessToken(code);
+                  localStorage.setItem('access_token', data.access_token);
+                  localStorage.setItem('refresh_token', data.refresh_token);
+                  localStorage.setItem('token_expiry', (new Date().getTime() + data.expires_in * 1000).toString());
+                  navigate('/start');
+                } catch (error) {
+                  console.error('Error fetching access token:', error);
+                }
             } else if (!localStorage.getItem('access_token')) {
                 window.location.href = getAuthUrl();
             } else if (isTokenExpired()) {
@@ -36,7 +40,7 @@ const App: React.FC = () => {
         };
 
         handleToken();
-    }, [navigate]);
+    }, []);
 
     return (
         <Routes>

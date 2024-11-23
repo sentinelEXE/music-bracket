@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import qs from 'qs';
 import path from 'path';
+import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -15,6 +16,10 @@ dotenv.config({ path: envFilePath });
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://192.168.0.43:3000',
+}));
 
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 
@@ -104,13 +109,11 @@ app.post('/api/refresh_token', async (req: Request<{}, {}, RefreshTokenRequestBo
   }
 });
 
-// Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../../build')));
 
-// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build/index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

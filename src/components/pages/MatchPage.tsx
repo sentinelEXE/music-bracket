@@ -10,8 +10,6 @@ declare global {
   }
 }
 
-
-
 export const MatchPage: React.FC = () => {
     const songs = useSelector((state: any) => state.songs) as Song[];
     const [selectedSongs, setSelectedSongs] = useState<Song[]>([]);

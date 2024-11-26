@@ -6,6 +6,8 @@ import path from 'path';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import https from 'https';
+import fs from 'fs';
 
 // Convert __dirname to ES module equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -18,7 +20,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'http://192.168.0.43:3000',
+  origin: 'https://192.168.0.43:3000',
 }));
 
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
@@ -31,7 +33,8 @@ interface RefreshTokenRequestBody {
   refresh_token: string;
 }
 
-const fetchAccessToken = async (code: string): Promise<any> => {
+app.post('/api/token', async (req: Request<{}, {}, TokenRequestBody>, res: Response) => {
+  const { code } = req.body;
   try {
     const response = await axios.post(
       TOKEN_URL,
@@ -48,64 +51,42 @@ const fetchAccessToken = async (code: string): Promise<any> => {
         },
       }
     );
-    return response.data;
+    res.json(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Error fetching access token:', error.response ? error.response.data : error.message);
     } else {
       console.error('Error fetching access token:', (error as Error).message);
     }
-    throw new Error(error instanceof Error ? error.message : 'An error occurred');
+    res.status(500).json({ error: 'Failed to fetch access token' });
   }
-};
+});
 
-const refreshAccessToken = async (refreshToken: string) => {
+app.post('/api/refresh_token', async (req: Request<{}, {}, RefreshTokenRequestBody>, res: Response) => {
+  const { refresh_token } = req.body;
   try {
-    const response = await axios.post(TOKEN_URL, 
+    const response = await axios.post(
+      TOKEN_URL,
       qs.stringify({
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    }
-  );
-    return response.data;
+        grant_type: 'refresh_token',
+        refresh_token,
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
+    res.json(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Error refreshing access token:', error.response ? error.response.data : error.message);
     } else {
       console.error('Error refreshing access token:', (error as Error).message);
     }
-    throw new Error(error instanceof Error ? error.message : 'An error occurred');
-  }
-};
-
-app.post('/api/token', async (req: Request<{}, {}, TokenRequestBody>, res: Response) => {
-  const { code } = req.body;
-
-  try {
-    const data = await fetchAccessToken(code);
-    res.json(data);
-  } catch (error) {
-    console.error('Error in /api/token route:', (error as Error).message);
-    res.status(500).send({ message: 'An unexpected error occurred', error: (error as Error).message });
-  }
-});
-
-app.post('/api/refresh_token', async (req: Request<{}, {}, RefreshTokenRequestBody>, res: Response) => {
-  const { refresh_token } = req.body;
-
-  try {
-    const data = await refreshAccessToken(refresh_token);
-    res.json(data);
-  } catch (error) {
-    console.error('Error in /api/refresh_token route:', (error as Error).message);
-    res.status(500).send({ message: 'An unexpected error occurred', error: (error as Error).message });
+    res.status(500).json({ error: 'Failed to refresh access token' });
   }
 });
 
@@ -116,4 +97,13 @@ app.get('*', (req, res) => {
 });
 
 const PORT = 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const HOST = '0.0.0.0';
+
+const httpsOptions = {
+  key: fs.readFileSync(path.resolve(__dirname, '../../server.key')),
+  cert: fs.readFileSync(path.resolve(__dirname, '../../server.crt')),
+};
+
+https.createServer(httpsOptions, app).listen(PORT, HOST, () => {
+  console.log(`Server running on https://${HOST}:${PORT}`);
+});

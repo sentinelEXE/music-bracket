@@ -1,5 +1,5 @@
 // src/components/pages/BracketPage.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Playlist, Song } from '../../types/types';
 import { fetchPlaylistSongs } from '../../api/fetch-playlist-songs';
@@ -14,7 +14,7 @@ export const BracketPage: React.FC = () => {
     const contestantNumber = useSelector((state: any) => state.contestantNumber);
     const accessToken = localStorage.getItem('access_token');
 
-    const { PlaceholderComponent } = useAsync<Song[]>({
+    const { execute, PlaceholderComponent } = useAsync<Song[]>({
         fetchFunction: fetchPlaylistSongs,
         params: [selectedPlaylist?.id, accessToken],
         onSuccess: (data) => {
@@ -23,10 +23,14 @@ export const BracketPage: React.FC = () => {
                 dispatch(setSongs(selectedSongs));
             }
         },
-        onFailure: (err) => {
-          console.error('Error fetching playlist details:', err);
-        },
-      });
+        loaded: songs.length > 0
+    });
+
+    useEffect(() => {
+      if (songs.length === 0 && selectedPlaylist && contestantNumber > 0) {
+        execute();
+      }
+    }, [songs, selectedPlaylist, contestantNumber, execute]);
       
     return (
       <div>
@@ -47,6 +51,7 @@ export const BracketPage: React.FC = () => {
           <p>No playlist selected</p>
         )}
       <a href="/match">Start Bracket</a>
+      <a href='/victory'>Victory</a>
     </div>
     );
 };

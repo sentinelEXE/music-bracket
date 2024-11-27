@@ -54,3 +54,5 @@ export interface Image {
     height: number;
     width: number;
 }
+
+export interface OnClickEvent extends React.MouseEvent<HTMLButtonElement> {}

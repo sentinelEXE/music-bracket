@@ -5,6 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { OnClickEvent } from '../../types/types';
 import { resetState, selectWinningSong } from '../../store/store';
 
+declare global {
+  interface Window {
+    onSpotifyIframeApiReady: (IFrameAPI: any) => void;
+  }
+}
 export const VictoryPage: React.FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -14,11 +19,13 @@ export const VictoryPage: React.FC = () => {
       if (winningSong) {
         window.onSpotifyIframeApiReady = (IFrameAPI) => {
           const element = document.getElementById('song');
-          const options = {
-            uri: winningSong.uri
-          };
-          const callback = (EmbedController: any) => {};
-          IFrameAPI.createController(element, options, callback);
+          if (element) {
+            const options = {
+              uri: winningSong.uri,
+            };
+            const callback = (EmbedController: any) => {};
+            IFrameAPI.createController(element, options, callback);
+          }
         };
       }
     }, [winningSong]);

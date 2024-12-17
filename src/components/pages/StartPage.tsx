@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Playlist } from '../../types/types';
 import { setSelectedPlaylist, setContestantNumber, setBracketTitle } from '../../store/store';
-import '../../styles/StartPage.css';
+import { fetchPlaylists } from '../../api/fetch-playlists';
+import { useAsync } from '../../hooks/use-async';
+import '../../styles/pages/StartPage.css';
 
 export const StartPage: React.FC = () => {
     const accessToken = localStorage.getItem('access_token');
@@ -15,20 +17,26 @@ export const StartPage: React.FC = () => {
     const [selectedPlaylist, setSelectedPlaylistState] = useState<Playlist | null>();
 
     const navigate = useNavigate();
-    const hasFetchedPlaylist = useRef(false);
+    const hasFetchedPlaylists = useRef(false);
+
+    const { execute: executeFetchPlaylists } = useAsync<any[]>({
+        fetchFunction: fetchPlaylists,
+        params: [accessToken],
+        onSuccess: (data) => {
+          setPlaylists(data);
+        },
+        onFailure: (error) => {
+          console.error('Error fetching playlists:', error);
+        },
+        loaded: playlists.length > 0,
+    });
 
     useEffect(() => {
-        if (accessToken && !hasFetchedPlaylist.current) {
-            fetch('https://api.spotify.com/v1/me/playlists', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => {setPlaylists(data.items); hasFetchedPlaylist.current = true;})
-            .catch(error => console.error('Error fetching playlists:', error));
+        if (accessToken && !hasFetchedPlaylists.current) {
+            executeFetchPlaylists();
+            hasFetchedPlaylists.current = true;
         }
-    }, [accessToken]);
+    }, [accessToken, executeFetchPlaylists]);
 
     const handleGenerateBracket = () => {
         if (selectedPlaylist) {

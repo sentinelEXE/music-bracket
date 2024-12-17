@@ -2,7 +2,7 @@
 import React from 'react';
 import { Match } from '../../types/types';
 import Round from './Round';
-import '../../styles/Bracket.css';
+import '../../styles/layout/Bracket.css';
 
 interface BracketProps {
   matches: Match[];

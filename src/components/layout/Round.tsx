@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Match as MatchType } from '../../types/types';
 import { Match } from './Match';
-import '../../styles/Round.css';
+import '../../styles/layout/Round.css';
 
 interface RoundProps {
   roundMatches: MatchType[];

@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { MatchState, Match as MatchType } from '../../types/types';
-import '../../styles/Match.css';
+import '../../styles/layout/Match.css';
 
 interface MatchProps {
   match: MatchType;

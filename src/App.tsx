@@ -40,7 +40,7 @@ const App: React.FC = () => {
         };
 
         handleToken();
-    }, []);
+    }, [navigate]);
 
     return (
         <Routes>

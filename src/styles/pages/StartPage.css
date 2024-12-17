@@ -6,6 +6,29 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    width: 100%;
+}
+
+.StartPage h1 {
+    text-align: center;
+    font-size: 40px;
+    position: absolute;
+    top: 20px;
+    width: 100%;
+}
+
+.StartPage .instructions {
+    text-align: center;
+    font-size: 15px;
+    margin: 30px;
+}
+
+.StartPage .inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
 }
 
 .StartPage input[type='text'] {
@@ -27,6 +50,50 @@
     color: #333;
     font-style: italic;
     text-align: center;
+}
+.StartPage select {
+    width: 175px;
+    font-size: 15px;
+    background-color: #f9f9f9;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    color: #000;
+    height: 35px;
+    width: 175px;
+    padding: 5px;
+}
+
+.StartPage select:focus {
+    border-color: #85c6dc;
+}
+
+.StartPage button {
+    background-color: #7e7edb;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.StartPage button:hover {
+    background-color: #6d8bb9;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.StartPage button:active {
+    background-color: #390397;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.StartPage button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 

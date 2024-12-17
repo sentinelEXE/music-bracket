@@ -50,10 +50,9 @@ export const MatchPage: React.FC = () => {
     }, [firstSong, secondSong]);
 
     const onDecisionClick = useCallback((event: OnClickEvent) => {
-      console.log({ matchId, firstSong, secondSong });
       if (matchId && firstSong && secondSong) {
         const buttonId = event.currentTarget.id;
-        const matchState = buttonId === firstSong?.id ? MatchState.Song0Wins : MatchState.Song1Wins;
+        const matchState = buttonId === firstSong.id ? MatchState.Song0Wins : MatchState.Song1Wins;
         dispatch(updateMatchState(matchId!, matchState));
       }
       navigate('/bracket');

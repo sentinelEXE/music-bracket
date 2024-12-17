@@ -26,6 +26,7 @@ export const useBuildBracket = () => {
         }
 
         const matches: Match[] = [];
+        const totalRounds = Math.log2(contestantNumber);
         const totalMatches = contestantNumber - 1;
 
         // Generate all matches
@@ -33,6 +34,7 @@ export const useBuildBracket = () => {
             const round = assignRound(i, totalMatches + 1);
             const match: Match = {
                 id: generateMatchId(),
+                matchNumber: i,
                 round: round + 1,
                 songs: [null, null] as Pair<Song | null>,
                 previousMatchIds: [null, null],
@@ -47,9 +49,9 @@ export const useBuildBracket = () => {
             matches[i].songs = [songs[i * 2], songs[i * 2 + 1]] as Pair<Song>;
         }
 
-        // Link matches
+        // Link matches correctly
         for (let i = 0; i < totalMatches; i++) {
-            const nextMatchIndex = Math.floor((i + 1) / 2) + contestantNumber / 2 - 1;
+            const nextMatchIndex = Math.floor(i / 2) + Math.floor(contestantNumber / 2);
             if (nextMatchIndex < totalMatches) {
                 matches[i].nextMatchId = matches[nextMatchIndex].id;
                 if (i % 2 === 0) {
@@ -61,6 +63,7 @@ export const useBuildBracket = () => {
         }
 
         const championshipMatch = matches[totalMatches - 1];
+        championshipMatch.nextMatchId = null;
 
         const bracket: Bracket = {
             id: "test-bracket",

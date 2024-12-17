@@ -26,6 +26,7 @@ export interface Artist {
 
 export interface Match {
     id: string;
+    matchNumber: number;
     round: number;
     songs: Pair<Song | null>;
     previousMatchIds: Pair<string | null>;

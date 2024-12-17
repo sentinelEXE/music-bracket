@@ -1,9 +1,10 @@
 // src/store/store.ts
 import { createStore, applyMiddleware } from 'redux';
 import { thunk, ThunkMiddleware } from 'redux-thunk';
-import { AppState, Playlist, Song, Bracket, MatchState } from '../types/types';
+import { AppState, Playlist, Song, Bracket, MatchState, Match } from '../types/types';
 import localStorageMiddleware from './localStorageMiddleware';
 import { loadState } from './loadState';
+import { updateMatchStateHelper } from './update-match-state-helper';
 
 // Define initial state
 const initialState: AppState = {
@@ -14,7 +15,7 @@ const initialState: AppState = {
   contestantNumber: 0,
 };
 
-export const selectMatchById = (state: AppState, matchId: string) => {
+export const selectMatchById = (state: AppState, matchId: string | null): Match | undefined => {
   return state.bracket?.matches.find((match) => match.id === matchId);
 };
 
@@ -76,17 +77,7 @@ const rootReducer = (state = initialState, action: any): AppState => {
       return { ...state, bracketName: action.payload };
       case UPDATE_MATCH_STATE:
         const { matchId, matchState } = action.payload;
-        if (!state.bracket) { return state; }
-        const updatedMatches = state.bracket.matches.map((match) =>
-          match.id === matchId ? { ...match, matchState } : match
-        );
-        return {
-          ...state,
-          bracket: {
-            ...state.bracket,
-            matches: updatedMatches,
-          },
-        };
+        return updateMatchStateHelper(state, matchId, matchState);
     case RESET_STATE:
       localStorage.removeItem('reduxState');
       return { ...initialState };

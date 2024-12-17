@@ -43,7 +43,7 @@ export enum MatchState {
 export interface Bracket {
     id: string;
     name: string;
-    championshipMatch: Match;
+    championshipMatchId: string;
     matches: Match[];
 }
 

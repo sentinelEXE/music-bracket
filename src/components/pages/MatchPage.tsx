@@ -20,6 +20,7 @@ export const MatchPage: React.FC = () => {
     const query = useQuery();
     const matchId = query.get('id');
     const match = useSelector((state: any) => selectMatchById(state, matchId!));
+    const championshipMatchId = useSelector((state: any) => state.bracket.championshipMatchId);
     const [firstSong, setFirstSong] = useState<Song | undefined>(undefined);
     const [secondSong, setSecondSong] = useState<Song | undefined>(undefined);
     const navigate = useNavigate();
@@ -55,8 +56,16 @@ export const MatchPage: React.FC = () => {
         const matchState = buttonId === firstSong.id ? MatchState.Song0Wins : MatchState.Song1Wins;
         dispatch(updateMatchState(matchId!, matchState));
       }
+      if (matchId === championshipMatchId) {
+        navigate('/victory');
+      } else {
+        navigate('/bracket');
+      }
+    }, [navigate, dispatch, matchId, firstSong, secondSong, championshipMatchId]);
+
+    const navigateBack = useCallback(() => {
       navigate('/bracket');
-    }, [navigate, dispatch, matchId, firstSong, secondSong]);
+    }, [navigate]);
   
     return (
       <div>
@@ -68,6 +77,7 @@ export const MatchPage: React.FC = () => {
             <div>
               <button id={firstSong.id} onClick={onDecisionClick}>{firstSong.name}</button>
               <button id={secondSong.id} onClick={onDecisionClick}>{secondSong.name}</button>
+              <button id="back" onClick={navigateBack}>Back to bracket</button>
             </div>
           </div>
         ) : (

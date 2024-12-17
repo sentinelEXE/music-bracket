@@ -15,8 +15,15 @@ const initialState: AppState = {
   contestantNumber: 0,
 };
 
-export const selectMatchById = (state: AppState, matchId: string | null): Match | undefined => {
+export const selectMatchById = (state: AppState, matchId: string | undefined): Match | undefined => {
   return state.bracket?.matches.find((match) => match.id === matchId);
+};
+
+export const selectWinningSong = (state: AppState): Song | null=> {
+  const championshipMatch = selectMatchById(state, state.bracket?.championshipMatchId);
+  if (!championshipMatch || championshipMatch.matchState === MatchState.Undecided) { return null; }
+  const winningSong =  championshipMatch.matchState === MatchState.Song0Wins ? championshipMatch.songs[0] : championshipMatch.songs[1];
+  return winningSong;
 };
 
 // Define action types

@@ -52,7 +52,6 @@ export const BracketPage: React.FC = () => {
       ) : (
         <p>No playlist selected</p>
       )}
-    <a href="/match">Start Bracket</a>
     <a href='/victory'>Victory</a>
   </div>
   );

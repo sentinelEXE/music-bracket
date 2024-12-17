@@ -41,7 +41,7 @@ export const VictoryPage: React.FC = () => {
 
     return (
         <div>
-          <h1>Match Page</h1>
+          <h1>Winner!</h1>
           {selectedSongs.length === 1 ? (
             <div>
               {selectedSongs[0].uri && <div id='song'/>}

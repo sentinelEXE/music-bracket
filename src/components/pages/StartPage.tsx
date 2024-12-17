@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Playlist } from '../../types/types';
-import { setSelectedPlaylist, setContestantNumber } from '../../store/store';
+import { setSelectedPlaylist, setContestantNumber, setBracketTitle } from '../../store/store';
 import '../../styles/StartPage.css';
 
 export const StartPage: React.FC = () => {
@@ -33,6 +33,7 @@ export const StartPage: React.FC = () => {
         if (selectedPlaylist) {
           dispatch(setSelectedPlaylist(selectedPlaylist));
           dispatch(setContestantNumber(contestantNumber));
+          dispatch(setBracketTitle(title));
           navigate('/bracket');
         }
       };

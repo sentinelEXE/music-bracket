@@ -10,6 +10,7 @@ const initialState: AppState = {
   selectedPlaylist: null,
   songs: [],
   bracket: null,
+  bracketName: "",
   contestantNumber: 0,
 };
 
@@ -18,6 +19,7 @@ const SET_SELECTED_PLAYLIST = 'SET_SELECTED_PLAYLIST';
 const SET_SONGS = 'SET_SONGS';
 const SET_BRACKET = 'SET_BRACKET';
 const SET_CONTESTANT_NUMBER = 'SET_CONTESTANT_NUMBER';
+const SET_BRACKET_TITLE = 'SET_BRACKET_TITLE';
 const RESET_STATE = 'RESET_STATE';
 
 // Define action creators
@@ -41,6 +43,11 @@ export const setContestantNumber = (number: number) => ({
   payload: number,
 });
 
+export const setBracketTitle = (title: string) => ({
+  type: SET_BRACKET_TITLE,
+  payload: title,
+});
+
 export const resetState = () => ({
   type: RESET_STATE,
 });
@@ -55,6 +62,8 @@ const rootReducer = (state = initialState, action: any): AppState => {
       return { ...state, bracket: action.payload };
     case SET_CONTESTANT_NUMBER:
       return { ...state, contestantNumber: action.payload };
+    case SET_BRACKET_TITLE:
+      return { ...state, bracketName: action.payload };
     case RESET_STATE:
       localStorage.removeItem('reduxState');
       return { ...initialState };

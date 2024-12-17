@@ -26,26 +26,31 @@ export interface Artist {
 
 export interface Match {
     id: string;
-    song1: Song;
-    song2: Song;
-    winner?: Song;
+    round: number;
+    songs: Pair<Song | null>;
+    previousMatchIds: Pair<string | null>;
+    nextMatchId: string | null;
+    matchState: MatchState;
 }
 
-export interface Round {
-    id: string;
-    matches: Match[];
+export enum MatchState {
+    Song0Wins,
+    Song1Wins,
+    Undecided,
 }
 
 export interface Bracket {
     id: string;
     name: string;
-    rounds: Round[];
+    championshipMatch: Match;
+    matches: Match[];
 }
 
 export interface AppState {
     selectedPlaylist: Playlist | null;
     songs: Song[];
     bracket: Bracket | null;
+    bracketName: string;
     contestantNumber: number;
   }
 
@@ -54,5 +59,7 @@ export interface Image {
     height: number;
     width: number;
 }
+
+export type Pair<T> = [T, T];
 
 export interface OnClickEvent extends React.MouseEvent<HTMLButtonElement> {}

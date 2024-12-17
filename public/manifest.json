@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Music Bracket",
+  "name": "Battle of the best songs",
   "icons": [
     {
       "src": "favicon.ico",

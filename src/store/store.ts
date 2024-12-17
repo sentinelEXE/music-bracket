@@ -1,7 +1,7 @@
 // src/store/store.ts
 import { createStore, applyMiddleware } from 'redux';
 import { thunk, ThunkMiddleware } from 'redux-thunk';
-import { AppState, Playlist, Song, Bracket } from '../types/types';
+import { AppState, Playlist, Song, Bracket, MatchState } from '../types/types';
 import localStorageMiddleware from './localStorageMiddleware';
 import { loadState } from './loadState';
 
@@ -14,12 +14,17 @@ const initialState: AppState = {
   contestantNumber: 0,
 };
 
+export const selectMatchById = (state: AppState, matchId: string) => {
+  return state.bracket?.matches.find((match) => match.id === matchId);
+};
+
 // Define action types
 const SET_SELECTED_PLAYLIST = 'SET_SELECTED_PLAYLIST';
 const SET_SONGS = 'SET_SONGS';
 const SET_BRACKET = 'SET_BRACKET';
 const SET_CONTESTANT_NUMBER = 'SET_CONTESTANT_NUMBER';
 const SET_BRACKET_TITLE = 'SET_BRACKET_TITLE';
+const UPDATE_MATCH_STATE = 'UPDATE_MATCH_STATE';
 const RESET_STATE = 'RESET_STATE';
 
 // Define action creators
@@ -48,6 +53,11 @@ export const setBracketTitle = (title: string) => ({
   payload: title,
 });
 
+export const updateMatchState = (matchId: string, matchState: MatchState) => ({
+  type: UPDATE_MATCH_STATE,
+  payload: { matchId, matchState },
+});
+
 export const resetState = () => ({
   type: RESET_STATE,
 });
@@ -64,6 +74,19 @@ const rootReducer = (state = initialState, action: any): AppState => {
       return { ...state, contestantNumber: action.payload };
     case SET_BRACKET_TITLE:
       return { ...state, bracketName: action.payload };
+      case UPDATE_MATCH_STATE:
+        const { matchId, matchState } = action.payload;
+        if (!state.bracket) { return state; }
+        const updatedMatches = state.bracket.matches.map((match) =>
+          match.id === matchId ? { ...match, matchState } : match
+        );
+        return {
+          ...state,
+          bracket: {
+            ...state.bracket,
+            matches: updatedMatches,
+          },
+        };
     case RESET_STATE:
       localStorage.removeItem('reduxState');
       return { ...initialState };

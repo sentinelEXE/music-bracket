@@ -34,9 +34,9 @@ export interface Match {
 }
 
 export enum MatchState {
-    Song0Wins,
-    Song1Wins,
-    Undecided,
+    Song0Wins = "Song 0 Wins",
+    Song1Wins = "Song 1 Wins",
+    Undecided = "Undecided",
 }
 
 export interface Bracket {

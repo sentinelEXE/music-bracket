@@ -1,9 +1,9 @@
 // src/components/pages/MatchPage.tsx
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { OnClickEvent, Song } from '../../types/types';
-import { getRandomSongs } from '../../utils/get-random-songs';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { MatchState, OnClickEvent, Song } from '../../types/types';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { updateMatchState, selectMatchById } from '../../store/store';
 
 declare global {
   interface Window {
@@ -11,52 +11,64 @@ declare global {
   }
 }
 
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
+
 export const MatchPage: React.FC = () => {
-    const songs = useSelector((state: any) => state.songs) as Song[];
-    const [selectedSongs, setSelectedSongs] = useState<Song[]>([]);
+    const dispatch = useDispatch();
+    const query = useQuery();
+    const matchId = query.get('id');
+    const match = useSelector((state: any) => selectMatchById(state, matchId!));
+    const [firstSong, setFirstSong] = useState<Song | undefined>(undefined);
+    const [secondSong, setSecondSong] = useState<Song | undefined>(undefined);
     const navigate = useNavigate();
   
     useEffect(() => {
-      if (songs.length > 0) {
-        const randomSongs = getRandomSongs(songs, 2);
-        setSelectedSongs(randomSongs);
+      if (match) {
+        setFirstSong(match.songs[0] || undefined);
+        setSecondSong(match.songs[1] || undefined);
       }
-    }, [songs]);
+    }, [match]);
 
     useEffect(() => {
-      if (selectedSongs.length === 2) {
+      if (firstSong && secondSong) {
         window.onSpotifyIframeApiReady = (IFrameAPI) => {
           const element1 = document.getElementById('song1');
           const element2 = document.getElementById('song2');
           const options1 = {
-            uri: selectedSongs[0].uri
+            uri: firstSong.uri
           };
           const options2 = {
-            uri: selectedSongs[1].uri
+            uri: secondSong.uri
           };
           const callback = (EmbedController: any) => {};
           IFrameAPI.createController(element1, options1, callback);
           IFrameAPI.createController(element2, options2, callback);
         };
       }
-    }, [selectedSongs]);
+    }, [firstSong, secondSong]);
 
-    const onClick = useCallback((event: OnClickEvent) => {
-      const buttonId = event.currentTarget.id;
-      console.log('Button clicked:', buttonId);
+    const onDecisionClick = useCallback((event: OnClickEvent) => {
+      console.log({ matchId, firstSong, secondSong });
+      if (matchId && firstSong && secondSong) {
+        const buttonId = event.currentTarget.id;
+        const matchState = buttonId === firstSong?.id ? MatchState.Song0Wins : MatchState.Song1Wins;
+        dispatch(updateMatchState(matchId!, matchState));
+      }
       navigate('/bracket');
-    }, [navigate]);
+    }, [navigate, dispatch, matchId, firstSong, secondSong]);
   
     return (
       <div>
         <h1>Match Page</h1>
-        {selectedSongs.length === 2 ? (
+        {firstSong && secondSong ? (
           <div>
-            {selectedSongs[0].uri && <div id='song1'/>}
-            {selectedSongs[1].uri && <div id='song2'/>}
+            {firstSong.uri && <div id='song1'/>}
+            {secondSong.uri && <div id='song2'/>}
             <div>
-              <button id={selectedSongs[0].id} onClick={onClick}>{selectedSongs[0].name}</button>
-              <button id={selectedSongs[1].id} onClick={onClick}>{selectedSongs[1].name}</button>
+              <button id={firstSong.id} onClick={onDecisionClick}>{firstSong.name}</button>
+              <button id={secondSong.id} onClick={onDecisionClick}>{secondSong.name}</button>
             </div>
           </div>
         ) : (

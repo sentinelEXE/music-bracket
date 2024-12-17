@@ -10,26 +10,26 @@ import { useAsync } from '../../hooks/use-async';
 import { useBuildBracket } from '../../hooks/use-build-bracket';
 
 export const BracketPage: React.FC = () => {
-    const dispatch = useDispatch();
-    const songs = useSelector((state: any) => state.songs) as Song[];
-    const selectedPlaylist = useSelector((state: any) => state.selectedPlaylist);
-    const contestantNumber = useSelector((state: any) => state.contestantNumber);
-    const bracket = useSelector((state: any) => state.bracket)
-    const accessToken = localStorage.getItem('access_token');
+  const dispatch = useDispatch();
+  const songs = useSelector((state: any) => state.songs) as Song[];
+  const selectedPlaylist = useSelector((state: any) => state.selectedPlaylist);
+  const contestantNumber = useSelector((state: any) => state.contestantNumber);
+  const bracket = useSelector((state: any) => state.bracket)
+  const accessToken = localStorage.getItem('access_token');
 
-    const { execute, PlaceholderComponent } = useAsync<Song[]>({
-        fetchFunction: fetchPlaylistSongs,
-        params: [selectedPlaylist?.id, accessToken],
-        onSuccess: (data) => {
-            if (data && data.length > 0 && contestantNumber > 0) {
-                const selectedSongs = getRandomSongs(data, contestantNumber);
-                dispatch(setSongs(selectedSongs));
-            }
-        },
-        loaded: songs.length > 0
-    });
+  const { execute, PlaceholderComponent } = useAsync<Song[]>({
+      fetchFunction: fetchPlaylistSongs,
+      params: [selectedPlaylist?.id, accessToken],
+      onSuccess: (data) => {
+          if (data && data.length > 0 && contestantNumber > 0) {
+              const selectedSongs = getRandomSongs(data, contestantNumber);
+              dispatch(setSongs(selectedSongs));
+          }
+      },
+      loaded: songs.length > 0
+  });
 
-    const { buildBracket } = useBuildBracket();
+  const { buildBracket } = useBuildBracket();
 
   useEffect(() => {
     if (songs.length === 0 && selectedPlaylist && contestantNumber > 0) {
@@ -37,32 +37,23 @@ export const BracketPage: React.FC = () => {
     } else if (songs.length > 0 && !bracket) {
       buildBracket(songs);
     }
-  }, [songs, selectedPlaylist, contestantNumber, execute, buildBracket]);
+  }, [songs, selectedPlaylist, contestantNumber, execute, buildBracket, bracket]);
       
-    return (
-      <div>
-        <h1>Bracket Page</h1>
-        {selectedPlaylist ? (
-          <PlaceholderComponent>
-            <h2>{selectedPlaylist.name}</h2>
-          <ul>
-            {songs?.map((song) => (
-              <li key={song.id}>
-                {song.name} by {song.artists.map(artist => artist.name).join(', ')}
-              </li>
-            ))}
-          </ul>
-            {bracket && (
-            <Bracket match={bracket.championshipMatch} matches={bracket.matches} />
+  return (
+    <div>
+      <h1>Bracket Page</h1>
+      {selectedPlaylist ? (
+        <PlaceholderComponent>
+          <h2>{selectedPlaylist.name}</h2>
+          {bracket && (
+            <Bracket matches={bracket.matches} />
           )}
-          </PlaceholderComponent>
-        ) : (
-          <p>No playlist selected</p>
-        )}
-      <a href="/match">Start Bracket</a>
-      <a href='/victory'>Victory</a>
-    </div>
-    );
+        </PlaceholderComponent>
+      ) : (
+        <p>No playlist selected</p>
+      )}
+    <a href="/match">Start Bracket</a>
+    <a href='/victory'>Victory</a>
+  </div>
+  );
 };
-
-export default BracketPage;

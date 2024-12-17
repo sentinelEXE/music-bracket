@@ -25,15 +25,12 @@ export const useBuildBracket = () => {
             throw new Error("The number of contestants must be a power of 2.");
         }
 
-        console.log("building....")
-
         const matches: Match[] = [];
-        const totalRounds = Math.log2(contestantNumber);
         const totalMatches = contestantNumber - 1;
 
         // Generate all matches
         for (let i = 0; i < totalMatches; i++) {
-            const round = Math.floor(Math.log2(i + 1));
+            const round = assignRound(i, totalMatches + 1);
             const match: Match = {
                 id: generateMatchId(),
                 round: round + 1,
@@ -66,7 +63,7 @@ export const useBuildBracket = () => {
         const championshipMatch = matches[totalMatches - 1];
 
         const bracket: Bracket = {
-            id: generateMatchId(),
+            id: "test-bracket",
             name: bracketName,
             championshipMatch: championshipMatch!,
             matches: matches,
@@ -79,3 +76,16 @@ export const useBuildBracket = () => {
 
     return { buildBracket };
 };
+
+function assignRound(index: number, totalMatches: number): number {
+    let round = 0;
+    let matchesInRound = totalMatches / 2;
+
+    while (index >= matchesInRound) {
+        round++;
+        index -= matchesInRound;
+        matchesInRound /= 2;
+    }
+
+    return round;
+}

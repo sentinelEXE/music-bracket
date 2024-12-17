@@ -1,33 +1,25 @@
 // src/components/layout/Bracket.tsx
 import React from 'react';
 import { Match } from '../../types/types';
+import Round from './Round';
+import '../../styles/Bracket.css';
 
 interface BracketProps {
-  match: Match;
   matches: Match[];
 }
 
-export const Bracket: React.FC<BracketProps> = ({ match, matches }) => {
-  const previousMatches = match.previousMatchIds.map(id => matches.find(m => m.id === id));
+export const Bracket: React.FC<BracketProps> = ({ matches }) => {
+  const rounds = Math.max(...matches.map(match => match.round));
+
+  const matchesByRound = Array.from({ length: rounds }, (_, i) =>
+    matches.filter(match => match.round === i + 1)
+  );
 
   return (
-    <div style={{ marginLeft: '20px', borderLeft: '1px solid black', paddingLeft: '10px' }}>
-      <div>
-        <strong>Match ID:</strong> {match.id}
-      </div>
-      <div>
-        <strong>Round:</strong> {match.round}
-      </div>
-      <div>
-        <strong>Songs:</strong> {match.songs[0]?.name} vs {match.songs[1]?.name}
-      </div>
-      <div>
-        <strong>Previous Matches:</strong>
-        <div>
-          {previousMatches[0] && <Bracket match={previousMatches[0]!} matches={matches} />}
-          {previousMatches[1] && <Bracket match={previousMatches[1]!} matches={matches} />}
-        </div>
-      </div>
+    <div className="bracket-container">
+      {matchesByRound.map((roundMatches, roundIndex) => (
+        <Round key={roundIndex} roundMatches={roundMatches} roundIndex={roundIndex} />
+      ))}
     </div>
   );
 };

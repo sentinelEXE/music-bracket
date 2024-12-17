@@ -1,5 +1,5 @@
 // src/components/pages/StartPage.tsx
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Playlist } from '../../types/types';
@@ -15,16 +15,17 @@ export const StartPage: React.FC = () => {
     const [selectedPlaylist, setSelectedPlaylistState] = useState<Playlist | null>();
 
     const navigate = useNavigate();
+    const hasFetchedPlaylist = useRef(false);
 
     useEffect(() => {
-        if (accessToken) {
+        if (accessToken && !hasFetchedPlaylist.current) {
             fetch('https://api.spotify.com/v1/me/playlists', {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             })
             .then(response => response.json())
-            .then(data => setPlaylists(data.items))
+            .then(data => {setPlaylists(data.items); hasFetchedPlaylist.current = true;})
             .catch(error => console.error('Error fetching playlists:', error));
         }
     }, [accessToken]);
@@ -56,7 +57,7 @@ export const StartPage: React.FC = () => {
 
     return (
         <div className='StartPage'>
-            <h1>Welcome to Music Bracket</h1>
+            <h1>Music Bracket</h1>
             <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Bracket title'/>
             <br/>
             <label htmlFor="contestantNumber">Select number of songs:</label>

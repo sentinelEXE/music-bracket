@@ -1,5 +1,5 @@
 // src/components/pages/BracketPage.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Bracket } from '../layout/Bracket';
 import { Song } from '../../types/types';
@@ -17,7 +17,7 @@ export const BracketPage: React.FC = () => {
   const bracket = useSelector((state: any) => state.bracket)
   const accessToken = localStorage.getItem('access_token');
 
-  const { execute, PlaceholderComponent } = useAsync<Song[]>({
+  const { execute: executeFetchPlaylist, PlaceholderComponent } = useAsync<Song[]>({
       fetchFunction: fetchPlaylistSongs,
       params: [selectedPlaylist?.id, accessToken],
       onSuccess: (data) => {
@@ -30,14 +30,16 @@ export const BracketPage: React.FC = () => {
   });
 
   const { buildBracket } = useBuildBracket();
+  const hasFetchedPlaylist = useRef(false);
 
   useEffect(() => {
-    if (songs.length === 0 && selectedPlaylist && contestantNumber > 0) {
-      execute();
+    if (!hasFetchedPlaylist.current && songs.length === 0 && selectedPlaylist && contestantNumber > 0) {
+      executeFetchPlaylist();
+      hasFetchedPlaylist.current = true;
     } else if (songs.length > 0 && !bracket) {
       buildBracket(songs);
     }
-  }, [songs, selectedPlaylist, contestantNumber, execute, buildBracket, bracket]);
+  }, [songs, selectedPlaylist, contestantNumber, executeFetchPlaylist, buildBracket, bracket]);
       
   return (
     <div>

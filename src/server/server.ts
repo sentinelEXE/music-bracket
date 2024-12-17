@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'https://192.168.0.43:3000',
+  origin: `https://${process.env.HOST}:${process.env.PORT}`,
 }));
 
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';

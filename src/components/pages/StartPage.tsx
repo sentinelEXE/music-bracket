@@ -1,12 +1,13 @@
 // src/components/pages/StartPage.tsx
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Playlist } from '../../types/types';
 import { setSelectedPlaylist, setContestantNumber, setBracketTitle } from '../../store/store';
 import { fetchPlaylists } from '../../api/fetch-playlists';
 import { useAsync } from '../../hooks/use-async';
-import { STRINGS } from '../../types/strings';
+import { ERRORS, STRINGS } from '../../constants/strings';
+import { VALUES } from '../../constants/values';
 import '../../styles/pages/StartPage.css';
 
 export const StartPage: React.FC = () => {
@@ -27,7 +28,7 @@ export const StartPage: React.FC = () => {
           setPlaylists(data);
         },
         onFailure: (error) => {
-          console.error('Error fetching playlists:', error);
+          console.error(ERRORS.FETCH_PLAYLISTS_ERROR, error);
         },
         loaded: playlists.length > 0,
     });
@@ -39,30 +40,32 @@ export const StartPage: React.FC = () => {
         }
     }, [accessToken, executeFetchPlaylists]);
 
-    const handleGenerateBracket = () => {
+    const handleGenerateBracket = useCallback(() => {
         if (selectedPlaylist) {
           dispatch(setSelectedPlaylist(selectedPlaylist));
           dispatch(setContestantNumber(contestantNumber));
           dispatch(setBracketTitle(title));
           navigate('/bracket');
         }
-      };
+      }, [dispatch, selectedPlaylist, contestantNumber, title, navigate]);
     
     const handlePlaylistChange = (playlist: Playlist) => {
         setSelectedPlaylistState(playlist);
     };
 
     const errorMessage = useMemo(() => {
-        if (selectedPlaylist?.tracks && selectedPlaylist.tracks.total < contestantNumber) {
-            return "This playlist does not have enough songs to start a bracket."
-        }
-        else if (!selectedPlaylist) {
-            return "Please select a playlist."
-        }
-        else {
+        if (!title) {
+            return ERRORS.NO_TITLE;
+        } else if (selectedPlaylist?.tracks && selectedPlaylist.tracks.total < contestantNumber) {
+            return ERRORS.NOT_ENOUGH_SONGS;
+        } else if (!contestantNumber || contestantNumber < 2) {
+            return ERRORS.NO_CONTESTANTS;
+        } else if (!selectedPlaylist) {
+            return ERRORS.NO_PLAYLIST_SELECTED;
+        } else {
             return "";
         }
-    }, [selectedPlaylist, contestantNumber]);
+    }, [title, selectedPlaylist, contestantNumber]);
 
     return (
         <div className='StartPage'>
@@ -76,7 +79,7 @@ export const StartPage: React.FC = () => {
                     onChange={(e) => setContestantNumberState(Number(e.target.value))}
                 >
                     <option value="" disabled>{STRINGS.SELECT_NUMBER_OF_SONGS}</option>
-                    {[2, 4, 8, 16, 32, 64, 128].map(num => (
+                    {VALUES.CONTESTANT_VALUES.map(num => (
                         <option key={num} value={num}>{num}</option>
                     ))}
                 </select>

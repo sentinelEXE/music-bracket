@@ -9,6 +9,7 @@ export const STRINGS = {
         GENERATE_BRACKET: 'Generate Bracket',
         LOADING_BRACKET: 'Loading bracket',
         NO_PLAYLIST_SELECTED: 'No playlist selected',
+        LOGIN_WITH_SPOTIFY: 'Login with Spotify',
     },
     VICTORY_PAGE: {
         WINNER: 'Winner!',

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Playlist, Song } from '../../types/types';
 import { storeSelectedPlaylist, storeContestantNumber, storeBracketTitle, storeSongs } from '../../store/store';
 import { fetchPlaylists } from '../../api/fetch-playlists';
+import { getAuthUrl } from '../../api/auth';
 import { useAsync } from '../../hooks/use-async';
 import { ERRORS, STRINGS } from '../../constants/strings';
 import { VALUES } from '../../constants/values';
@@ -93,6 +94,10 @@ export const StartPage: React.FC = () => {
         }
     }, [title, selectedPlaylist, contestantNumber]);
 
+    const handleLogin = () => {
+        window.location.href = getAuthUrl();
+    };
+
     useEffect(() => {
         if (isBracketBuilt === BracketBuildState.BUILT) {
             navigate('/bracket');
@@ -103,7 +108,10 @@ export const StartPage: React.FC = () => {
         <div className='StartPage'>
             <h1>{STRINGS.START_PAGE.TITLE}</h1>
             <p className='instructions'>{STRINGS.START_PAGE.INSTRUCTIONS}</p>
-            <div className='inputs'>
+            {!accessToken ? (
+                <button onClick={handleLogin}>{STRINGS.START_PAGE.LOGIN_WITH_SPOTIFY}</button>
+            ) : 
+            (<div className='inputs'>
                 <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Bracket title'/>
                 <br/>
                 <select 
@@ -138,7 +146,7 @@ export const StartPage: React.FC = () => {
                     : 
                     <>{STRINGS.START_PAGE.GENERATE_BRACKET}</>}
                 </button>
-            </div>
+            </div>)}
         </div>
     )
 };

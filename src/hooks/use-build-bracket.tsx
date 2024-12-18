@@ -5,10 +5,8 @@ import { Bracket, Match, Song, MatchState } from "../types/types";
 import { storeBracket } from "../store/store";
 import { Pair } from "../types/types";
 
-let matchIdCounter = 0;
-
-function generateMatchId(): string {
-    return `match-${matchIdCounter++}`;
+function generateMatchId(matchIdCounter: number): string {
+    return `match-${matchIdCounter}`;
 }
 
 function isPowerOfTwo(n: number): boolean {
@@ -22,7 +20,7 @@ export const useBuildBracket = (): (songs: Song[], bracketName: string, contesta
         if (!isPowerOfTwo(contestantNumber)) {
             throw new Error("The number of contestants must be a power of 2.");
         }
-
+        
         const matches: Match[] = [];
         const totalMatches = contestantNumber - 1;
 
@@ -30,7 +28,7 @@ export const useBuildBracket = (): (songs: Song[], bracketName: string, contesta
         for (let i = 0; i < totalMatches; i++) {
             const round = assignRound(i, totalMatches + 1);
             const match: Match = {
-                id: generateMatchId(),
+                id: generateMatchId(i),
                 matchNumber: i,
                 round: round + 1,
                 songs: [null, null] as Pair<Song | null>,

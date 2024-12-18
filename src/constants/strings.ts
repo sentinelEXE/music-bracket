@@ -16,6 +16,11 @@ export const STRINGS = {
         START_OVER: 'Start over',
         NO_WINNER: 'No winner',
     },
+    MATCH_PAGE: {
+        BACK_TO_BRACKET: 'Back to bracket',
+        NEXT_MATCH: 'Next match',
+        RESULTS: 'Results',
+    },
 };
 
 export const ERRORS = {

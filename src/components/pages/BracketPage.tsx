@@ -5,8 +5,6 @@ import { Bracket } from '../layout/Bracket';
 
 export const BracketPage: React.FC = () => {
   const bracket = useSelector((state: any) => state.bracket);
-      
-  console.log({bracket: bracket})
 
   return (
     <div>

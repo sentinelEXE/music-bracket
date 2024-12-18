@@ -1,0 +1,53 @@
+.VictoryPage {
+    background: linear-gradient(200deg, #390397, #4b4bec, #6d8bb9);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.VictoryPage h1 {
+    text-align: center;
+    font-size: 40px;
+    position: absolute;
+    top: 20px;
+    width: 100%;
+}
+
+.VictoryPage button {
+    display: flex;
+    background-color: #7e7edb;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 1rem;
+    width: 12rem;
+}
+
+.VictoryPage button:hover {
+    background-color: #6d8bb9;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.VictoryPage button:active {
+    background-color: #390397;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.VictoryPage button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}

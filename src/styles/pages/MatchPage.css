@@ -1,0 +1,70 @@
+.MatchPage {
+    background: linear-gradient(200deg, #390397, #4b4bec, #6d8bb9);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.MatchPage iframe {
+    margin-bottom: 3rem;
+}
+
+.MatchPage .pick {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    width: unset;
+}
+
+.MatchPage button {
+    display: flex;
+    position: relative;
+    background-color: #7e7edb;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 1rem;
+    width: 18rem;
+}
+
+.checkmark {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 24px;
+    color: rgb(23, 255, 23);
+}
+
+.MatchPage button:hover {
+    background-color: #6d8bb9;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.MatchPage .selected {
+    background-color: #6d8bb9;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+}
+
+.MatchPage button:active {
+    background-color: #390397;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.MatchPage button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}

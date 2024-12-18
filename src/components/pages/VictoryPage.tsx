@@ -18,6 +18,10 @@ export const VictoryPage: React.FC = () => {
     const winningSong = useSelector((state: any) => selectWinningSong(state));
 
     useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
       if (winningSong) {
         window.onSpotifyIframeApiReady = (IFrameAPI) => {
           const element = document.getElementById('song');

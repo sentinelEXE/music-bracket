@@ -36,13 +36,11 @@ export const useTokenManagement = () => {
       }
       setIsAuthenticated(!isTokenExpired());
     }, []);
-  
-    // Initial check
+    
     useEffect(() => {
       checkAuthStatus();
     }, [checkAuthStatus]);
-  
-    // Periodic check
+
     useEffect(() => {
       const interval = setInterval(checkAuthStatus, 1000 * 60);
       return () => clearInterval(interval);

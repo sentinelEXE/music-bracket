@@ -53,15 +53,16 @@ export const MatchPage: React.FC = () => {
         window.onSpotifyIframeApiReady = (IFrameAPI) => {
           const element1 = document.getElementById('song1');
           const element2 = document.getElementById('song2');
-          const options1 = {
-            uri: firstSong.uri
-          };
-          const options2 = {
-            uri: secondSong.uri
+          const options = {
+            uri: firstSong.uri,
+            theme: 'black',
+            allow: 'encrypted-media; autoplay',
+            preload: true,
+            loading: 'eager'
           };
           const callback = (EmbedController: any) => {};
-          IFrameAPI.createController(element1, options1, callback);
-          IFrameAPI.createController(element2, options2, callback);
+          IFrameAPI.createController(element1, options, callback);
+          IFrameAPI.createController(element2, {...options, uri: secondSong.uri}, callback);
         };
       }
     }, [firstSong, secondSong]);

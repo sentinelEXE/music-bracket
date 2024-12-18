@@ -10,7 +10,7 @@ import { useTokenManagement } from './hooks/use-token-management';
 
 const App: React.FC = () => {
     const navigate = useNavigate();
-    const { isAuthenticated, checkAuthStatus } = useTokenManagement();
+    const { checkAuthStatus } = useTokenManagement();
     const hasHandledCode = useRef(false);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const App: React.FC = () => {
                     localStorage.setItem('token_expiry', 
                         (new Date().getTime() + data.expires_in * 1000).toString()
                     );
-                    // Clean up URL
+
                     window.history.replaceState({}, document.title, "/start");
                     checkAuthStatus();
                     navigate('/start', { replace: true });
@@ -40,16 +40,12 @@ const App: React.FC = () => {
         handleToken();
     }, [navigate, checkAuthStatus]);
 
-    useEffect(() => {
-        console.log('isAuthenticated:', isAuthenticated);
-    },[isAuthenticated]);
-
     return (
         <Routes>
             <Route path="/start" element={<StartPage />} />
-            <Route path="/bracket" element={isAuthenticated ? <BracketPage /> : <Navigate to="/" />} />
-            <Route path="/match" element={isAuthenticated ? <MatchPage /> : <Navigate to="/" />} />
-            <Route path="/victory" element={isAuthenticated ? <VictoryPage /> : <Navigate to="/" />} />
+            <Route path="/bracket" element={<BracketPage />} />
+            <Route path="/match" element={<MatchPage />} />
+            <Route path="/victory" element={<VictoryPage />} />
             <Route path="*" element={<Navigate to="/start" replace />} />
         </Routes>
     );

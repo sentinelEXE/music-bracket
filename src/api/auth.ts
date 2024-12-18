@@ -9,7 +9,7 @@ const REDIRECT_URI = 'https://192.168.0.43:3000/start';
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 
 export const getAuthUrl = (): string => {
-    const scopes = 'user-read-private user-read-email playlist-modify-public';
+    const scopes = 'streaming user-read-private user-read-email playlist-modify-public user-modify-playback-state';
     return `${AUTH_URL}?${qs.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,

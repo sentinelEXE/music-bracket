@@ -28,6 +28,10 @@ export const VictoryPage: React.FC = () => {
           if (element) {
             const options = {
               uri: winningSong.uri,
+              theme: 'black',
+              allow: 'encrypted-media; autoplay',
+              preload: true,
+              loading: 'eager'
             };
             const callback = (EmbedController: any) => {};
             IFrameAPI.createController(element, options, callback);

@@ -87,7 +87,9 @@ export const MatchPage: React.FC = () => {
 
     const navigateToNext = useCallback(() => {
       const matchState = firstSongSelected ? MatchState.Song0Wins : secondSongSelected ? MatchState.Song1Wins : MatchState.Undecided;
-      dispatch(updateMatchState(matchId!, matchState));
+      if (matchState !== match?.matchState) {
+        dispatch(updateMatchState(matchId!, matchState));
+      }
       if (matchId === championshipMatchId) {
         navigate('/victory');
       } else {
@@ -101,7 +103,7 @@ export const MatchPage: React.FC = () => {
           setSelectedSong(undefined);
         }
       }
-    }, [navigate, dispatch, matches, matchId, championshipMatchId, firstSongSelected, secondSongSelected]);
+    }, [navigate, dispatch, match, matches, matchId, championshipMatchId, firstSongSelected, secondSongSelected]);
   
     return (
       <div className='MatchPage'>
@@ -130,7 +132,7 @@ export const MatchPage: React.FC = () => {
             <button id="next" onClick={navigateToNext} disabled={matchId === championshipMatchId && !selectedSong}>
               {matchId === championshipMatchId ? STRINGS.MATCH_PAGE.RESULTS : STRINGS.MATCH_PAGE.NEXT_MATCH}
             </button>
-            <button id="back" onClick={navigateBack} disabled={matchId !== championshipMatchId || !!selectedSong}>{STRINGS.MATCH_PAGE.BACK_TO_BRACKET}</button>
+            <button id="back" onClick={navigateBack} disabled={matchId === championshipMatchId && !!selectedSong}>{STRINGS.MATCH_PAGE.BACK_TO_BRACKET}</button>
           </>
         ) : (
           <p>Loading...</p>

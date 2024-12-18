@@ -130,7 +130,7 @@ export const MatchPage: React.FC = () => {
             <button id="next" onClick={navigateToNext} disabled={matchId === championshipMatchId && !selectedSong}>
               {matchId === championshipMatchId ? STRINGS.MATCH_PAGE.RESULTS : STRINGS.MATCH_PAGE.NEXT_MATCH}
             </button>
-            <button id="back" onClick={navigateBack}>{STRINGS.MATCH_PAGE.BACK_TO_BRACKET}</button>
+            <button id="back" onClick={navigateBack} disabled={matchId !== championshipMatchId || !!selectedSong}>{STRINGS.MATCH_PAGE.BACK_TO_BRACKET}</button>
           </>
         ) : (
           <p>Loading...</p>

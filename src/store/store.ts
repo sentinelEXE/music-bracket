@@ -36,27 +36,27 @@ const UPDATE_MATCH_STATE = 'UPDATE_MATCH_STATE';
 const RESET_STATE = 'RESET_STATE';
 
 // Define action creators
-export const setSelectedPlaylist = (playlist: Playlist) => ({
+export const storeSelectedPlaylist = (playlist: Playlist) => ({
   type: SET_SELECTED_PLAYLIST,
   payload: playlist,
 });
 
-export const setSongs = (songs: Song[]) => ({
+export const storeSongs = (songs: Song[]) => ({
   type: SET_SONGS,
   payload: songs,
 });
 
-export const setBracket = (bracket: Bracket) => ({
+export const storeBracket = (bracket: Bracket) => ({
   type: SET_BRACKET,
   payload: bracket,
 });
 
-export const setContestantNumber = (number: number) => ({
+export const storeContestantNumber = (number: number) => ({
   type: SET_CONTESTANT_NUMBER,
   payload: number,
 });
 
-export const setBracketTitle = (title: string) => ({
+export const storeBracketTitle = (title: string) => ({
   type: SET_BRACKET_TITLE,
   payload: title,
 });
@@ -66,7 +66,7 @@ export const updateMatchState = (matchId: string, matchState: MatchState) => ({
   payload: { matchId, matchState },
 });
 
-export const resetState = () => ({
+export const restoreState = () => ({
   type: RESET_STATE,
 });
 

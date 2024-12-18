@@ -3,7 +3,9 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { OnClickEvent } from '../../types/types';
-import { resetState, selectWinningSong } from '../../store/store';
+import { restoreState, selectWinningSong } from '../../store/store';
+import { STRINGS } from '../../constants/strings';
+import "../../styles/pages/VictoryPage.css";
 
 declare global {
   interface Window {
@@ -35,22 +37,22 @@ export const VictoryPage: React.FC = () => {
   }, [navigate]);
 
     const startOver = useCallback((event: OnClickEvent) => {
-        dispatch(resetState());
+        dispatch(restoreState());
         navigate('/start');
     }, [navigate, dispatch]);
 
     return (
-        <div>
-          <h1>Winner!</h1>
+        <div className='VictoryPage'>
+          <h1>{STRINGS.VICTORY_PAGE.WINNER}</h1>
           {winningSong ? (
             <div>
               {winningSong.uri && <div id='song'/>}
             </div>
           ) : (
-            <p>No winner yet</p>
+            <p>{STRINGS.VICTORY_PAGE.NO_WINNER}</p>
           )}
-          <button onClick={backToBracket}>Back to bracket</button>
-          <button onClick={startOver}>Start over</button>
+          <button onClick={backToBracket}>{STRINGS.VICTORY_PAGE.BACK_TO_BRACKET}</button>
+          <button onClick={startOver}>{STRINGS.VICTORY_PAGE.START_OVER}</button>
         </div>
       );
 };

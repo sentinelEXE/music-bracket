@@ -1,8 +1,8 @@
 // src/hooks/useBuildBracket.ts
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { Bracket, Match, Song, MatchState } from "../types/types";
-import { setBracket } from "../store/store";
+import { storeBracket } from "../store/store";
 import { Pair } from "../types/types";
 
 let matchIdCounter = 0;
@@ -15,12 +15,10 @@ function isPowerOfTwo(n: number): boolean {
     return (n & (n - 1)) === 0 && n !== 0;
 }
 
-export const useBuildBracket = () => {
+export const useBuildBracket = (): (songs: Song[], bracketName: string, contestantNumber: number) => Bracket => {
     const dispatch = useDispatch();
-    const bracketName = useSelector((state: any) => state.bracketName);
-    const contestantNumber = useSelector((state: any) => state.contestantNumber);
 
-    const buildBracket = useCallback((songs: Song[]): Bracket => {
+    const buildBracket = useCallback((songs: Song[], bracketName: string, contestantNumber: number): Bracket => {
         if (!isPowerOfTwo(contestantNumber)) {
             throw new Error("The number of contestants must be a power of 2.");
         }
@@ -70,12 +68,12 @@ export const useBuildBracket = () => {
             matches: matches,
         };
 
-        dispatch(setBracket(bracket));
+        dispatch(storeBracket(bracket));
 
         return bracket;
-    }, [bracketName, contestantNumber, dispatch]);
+    }, [dispatch]);
 
-    return { buildBracket };
+    return buildBracket;
 };
 
 function assignRound(index: number, totalMatches: number): number {

@@ -18,6 +18,7 @@ debug.log
 .env.test.local
 .env.production.local
 server.crt
+server.csr
 server.key
 
 npm-debug.log*

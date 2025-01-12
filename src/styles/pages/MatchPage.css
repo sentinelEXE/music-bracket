@@ -1,6 +1,4 @@
 .MatchPage {
-    background: linear-gradient(200deg, #390397, #4b4bec, #6d8bb9);
-    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,7 +36,7 @@
     width: 18rem;
 }
 
-.checkmark {
+.MatchPage .checkmark {
     position: absolute;
     bottom: 10px;
     left: 10px;

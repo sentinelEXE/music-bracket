@@ -1,6 +1,4 @@
 .StartPage {
-    background: linear-gradient(200deg, #390397, #4b4bec, #6d8bb9);
-    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;

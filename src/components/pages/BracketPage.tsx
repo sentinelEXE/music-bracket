@@ -17,7 +17,7 @@ export const BracketPage: React.FC = () => {
 
   return (
     <div className='BracketPage'>
-      <h1>Bracket Page</h1>
+      <h1>Bracket</h1>
       {bracket ? (
         <>
           <h2>{bracket.name}</h2>

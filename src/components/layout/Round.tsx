@@ -9,7 +9,7 @@ interface RoundProps {
   roundIndex: number;
 }
 
-const Round: React.FC<RoundProps> = ({ roundMatches, roundIndex }) => {
+export const Round: React.FC<RoundProps> = ({ roundMatches, roundIndex }) => {
 
   return (
     <div className="round-column">
@@ -19,5 +19,3 @@ const Round: React.FC<RoundProps> = ({ roundMatches, roundIndex }) => {
     </div>
   );
 };
-
-export default Round;

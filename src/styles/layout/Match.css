@@ -1,46 +1,46 @@
 .match-container {
     position: relative;
     margin-bottom: 20px;
-  }
-  
-  .match-box {
-    border: 1px solid black;
-    padding: 10px;
-    margin: 10px;
-    min-width: 150px; /* Set a minimum width */
-    min-height: 100px; /* Set a minimum height */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box; /* Ensure padding is included in the width and height */
-    word-wrap: break-word; /* Ensure long words break to fit within the box */
-  }
+    width: 100%;
+}
 
-  .winner {
-    background-color: green;
+.match-box .checkmark {
+  position: relative;
+  bottom: 0px;
+  left: 0px;
+  font-size: 24px;
+  color: rgb(23, 255, 23);
+}
 
-  }
+.match-box {
+  border: 1px solid white;
+  padding: 10px;
+  margin: 10px;
+  min-width: 150px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
 
-  .loser {
-    background-color: red;
-  }
-  
-  .match-link {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .match-link-disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-  
-  .connector-line {
-    position: absolute;
-    top: 50%;
-    right: -20px;
-    width: 20px;
-    height: 1px;
-    background-color: black;
-  }
+.match-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.match-link-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.connector-line {
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 20px;
+  height: 1px;
+  background-color: black;
+}

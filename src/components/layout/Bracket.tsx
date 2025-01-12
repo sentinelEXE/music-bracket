@@ -1,7 +1,7 @@
 // src/components/layout/Bracket.tsx
 import React from 'react';
 import { Match } from '../../types/types';
-import Round from './Round';
+import { Round } from './Round';
 import '../../styles/layout/Bracket.css';
 
 interface BracketProps {

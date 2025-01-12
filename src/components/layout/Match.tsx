@@ -14,14 +14,14 @@ export const Match: React.FC<MatchProps> = ({ match }) => {
 
     const matchContent = (
         <div className="match-box">
-          <div className={matchState === MatchState.Song0Wins ? "winner" : matchState === MatchState.Song1Wins ? "loser" : ""}>
-            {match.songs[0]?.name ?? 'TBD'}
+          <div>
+            {matchState === MatchState.Song0Wins && <span className="checkmark">✔ </span>} {match.songs[0]?.name ?? 'TBD'}
           </div>
           <div>
             vs
           </div>
-          <div className={matchState === MatchState.Song1Wins ? "winner" : matchState === MatchState.Song0Wins ? "loser" : ""}>
-            {match.songs[1]?.name ?? 'TBD'}
+          <div>
+            {matchState === MatchState.Song1Wins && <span className="checkmark">✔ </span>}{match.songs[1]?.name ?? 'TBD'}
           </div>
         </div>
       );
@@ -36,9 +36,6 @@ export const Match: React.FC<MatchProps> = ({ match }) => {
             <div className="match-link-disabled">
               {matchContent}
             </div>
-          )}
-          {match.nextMatchId && (
-            <div className="connector-line" />
           )}
         </div>
       );

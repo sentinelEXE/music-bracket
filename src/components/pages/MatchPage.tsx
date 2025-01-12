@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MatchState, OnClickEvent, Song } from '../../types/types';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { updateMatchState, selectMatchById } from '../../store/store';
+import { updateMatchState, selectMatchById, storeSelectedRound } from '../../store/store';
 import { getFirstUndecidedMatch } from '../../utils/get-first-undecided-match';
 import { STRINGS } from '../../constants/strings';
 import "../../styles/pages/MatchPage.css";
@@ -29,6 +29,10 @@ export const MatchPage: React.FC = () => {
     const [secondSong, setSecondSong] = useState<Song | undefined>(undefined);
     const [selectedSong, setSelectedSong] = useState<Song | undefined | null>(undefined);
     const navigate = useNavigate();
+    const nextMatchId = getFirstUndecidedMatch(matches, matchId || undefined);
+    const nextMatch = useSelector((state: any) => selectMatchById(state, nextMatchId!));
+
+    const nextMatchInNewRound = match && nextMatch && nextMatch?.round === match?.round + 1;
   
     useEffect(() => {
       if (match && match.songs && match.songs.length === 2) {
@@ -94,10 +98,10 @@ export const MatchPage: React.FC = () => {
       if (matchId === championshipMatchId) {
         navigate('/victory');
       } else {
-        const nextMatchId = getFirstUndecidedMatch(matches, matchId || undefined);
         if (!nextMatchId) {
           navigate('/bracket');
         } else {
+          dispatch(storeSelectedRound(nextMatch?.round ?? 1));
           navigate(`/match?id=${nextMatchId}`);
           setFirstSong(undefined);
           setSecondSong(undefined);
@@ -131,7 +135,7 @@ export const MatchPage: React.FC = () => {
             </button>
             )}
             <button id="next" onClick={navigateToNext} disabled={matchId === championshipMatchId && !selectedSong}>
-              {matchId === championshipMatchId ? STRINGS.MATCH_PAGE.RESULTS : STRINGS.MATCH_PAGE.NEXT_MATCH}
+              {matchId === championshipMatchId ? STRINGS.MATCH_PAGE.RESULTS : nextMatchInNewRound ? STRINGS.MATCH_PAGE.NEXT_ROUND : STRINGS.MATCH_PAGE.NEXT_MATCH}
             </button>
             <button id="back" onClick={navigateBack} disabled={matchId === championshipMatchId && !!selectedSong}>{STRINGS.MATCH_PAGE.BACK_TO_BRACKET}</button>
           </>

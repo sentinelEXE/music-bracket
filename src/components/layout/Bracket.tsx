@@ -21,8 +21,9 @@ export const Bracket: React.FC<BracketProps> = ({ matches, selectedRound }) => {
     <div className="bracket-container">
       {matchesByRound.map((roundMatches, roundIndex) => {
         if (selectedRound === roundIndex + 1) {
-          return <Round key={roundIndex} roundMatches={roundMatches} roundIndex={roundIndex} />;
-      }
+          return <Round key={roundIndex} roundMatches={roundMatches} />;
+        }
+        return null;
       })}
     </div>
   );

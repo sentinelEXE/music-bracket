@@ -1,23 +1,26 @@
 // src/components/pages/BracketPage.tsx
-import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Bracket } from '../layout/Bracket';
 import { AppState, OnClickEvent } from '../../types/types';
+import { storeSelectedRound } from '../../store/store';
+import { STRINGS } from '../../constants/strings';
 import "../../styles/pages/BracketPage.css";
 
-export const BracketPage: React.FC = () => {
+export const BracketPage: React.FC = () => {;
+  const dispatch = useDispatch()
   const bracket = useSelector((state: AppState) => state.bracket);
+  const selectedRound = useSelector((state: AppState) => state.selectedRound);
   const { matches } = bracket ?? {};
-  const [selectedRound, setSelectedRound] = useState(1);
   const rounds = Math.max(...(matches?.map(match => match.round) ?? []));
 
   const onClick = useCallback((event: OnClickEvent) => {
-    setSelectedRound(parseInt(event.currentTarget.id));
-  }, [])
+    dispatch(storeSelectedRound(parseInt(event.currentTarget.id)));
+  }, []);
 
   return (
     <div className='BracketPage'>
-      <h1>Bracket</h1>
+      <h1>{STRINGS.BRACKET_PAGE.TITLE}</h1>
       {bracket ? (
         <>
           <h2>{bracket.name}</h2>

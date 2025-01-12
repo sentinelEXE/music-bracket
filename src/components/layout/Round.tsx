@@ -1,15 +1,14 @@
 // src/components/layout/Round.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Match as MatchType } from '../../types/types';
 import { Match } from './Match';
 import '../../styles/layout/Round.css';
 
 interface RoundProps {
   roundMatches: MatchType[];
-  roundIndex: number;
 }
 
-export const Round: React.FC<RoundProps> = ({ roundMatches, roundIndex }) => {
+export const Round: React.FC<RoundProps> = ({ roundMatches }) => {
 
   return (
     <div className="round-column">

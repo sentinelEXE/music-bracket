@@ -11,15 +11,19 @@ export const STRINGS = {
         NO_PLAYLIST_SELECTED: 'No playlist selected',
         LOGIN_WITH_SPOTIFY: 'Login with Spotify',
     },
+    BRACKET_PAGE: {
+        TITLE: 'Bracket',
+    },
     VICTORY_PAGE: {
         WINNER: 'Winner!',
         BACK_TO_BRACKET: 'Back to bracket',
-        START_OVER: 'Start over',
+        START_OVER: 'New bracket',
         NO_WINNER: 'No winner',
     },
     MATCH_PAGE: {
         BACK_TO_BRACKET: 'Back to bracket',
         NEXT_MATCH: 'Next match',
+        NEXT_ROUND: 'Next round',
         RESULTS: 'Results',
     },
 };

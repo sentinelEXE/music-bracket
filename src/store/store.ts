@@ -13,6 +13,7 @@ const initialState: AppState = {
   bracket: null,
   bracketName: "",
   contestantNumber: 0,
+  selectedRound: 1,
 };
 
 export const selectMatchById = (state: AppState, matchId: string | undefined): Match | undefined => {
@@ -32,6 +33,7 @@ const SET_SONGS = 'SET_SONGS';
 const SET_BRACKET = 'SET_BRACKET';
 const SET_CONTESTANT_NUMBER = 'SET_CONTESTANT_NUMBER';
 const SET_BRACKET_TITLE = 'SET_BRACKET_TITLE';
+const SET_SELECTED_ROUND = 'SET_SELECTED_ROUND';
 const UPDATE_MATCH_STATE = 'UPDATE_MATCH_STATE';
 const RESET_STATE = 'RESET_STATE';
 
@@ -61,6 +63,11 @@ export const storeBracketTitle = (title: string) => ({
   payload: title,
 });
 
+export const storeSelectedRound = (round: number) => ({
+  type: SET_SELECTED_ROUND,
+  payload: round,
+});
+
 export const updateMatchState = (matchId: string, matchState: MatchState) => ({
   type: UPDATE_MATCH_STATE,
   payload: { matchId, matchState },
@@ -82,9 +89,11 @@ const rootReducer = (state = initialState, action: any): AppState => {
       return { ...state, contestantNumber: action.payload };
     case SET_BRACKET_TITLE:
       return { ...state, bracketName: action.payload };
-      case UPDATE_MATCH_STATE:
-        const { matchId, matchState } = action.payload;
-        return updateMatchStateHelper(state, matchId, matchState);
+    case SET_SELECTED_ROUND:
+      return {...state, selectedRound: action.payload };
+    case UPDATE_MATCH_STATE:
+      const { matchId, matchState } = action.payload;
+      return updateMatchStateHelper(state, matchId, matchState);
     case RESET_STATE:
       localStorage.removeItem('reduxState');
       return { ...initialState };

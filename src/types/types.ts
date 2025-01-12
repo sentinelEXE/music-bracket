@@ -53,6 +53,7 @@ export interface AppState {
     bracket: Bracket | null;
     bracketName: string;
     contestantNumber: number;
+    selectedRound: number;
   }
 
 export interface Image {

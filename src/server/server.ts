@@ -96,14 +96,14 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build/index.html'));
 });
 
-const PORT = 3001;
-const HOST = '0.0.0.0';
+const API_PORT = 3001;
+const HOST = process.env.HOST;
 
 const httpsOptions = {
   key: fs.readFileSync(path.resolve(__dirname, '../../server.key')),
   cert: fs.readFileSync(path.resolve(__dirname, '../../server.crt')),
 };
 
-https.createServer(httpsOptions, app).listen(PORT, HOST, () => {
-  console.log(`Server running on https://${HOST}:${PORT}`);
+https.createServer(httpsOptions, app).listen(API_PORT, HOST, () => {
+  console.log(`Server running on https://${HOST}:${API_PORT}`);
 });

@@ -1,9 +1,8 @@
 // src/api/auth.ts
 import axios from 'axios';
 import qs from 'qs';
-import { SERVER_URL, CLIENT_ID, REDIRECT_URI } from '../constants/local_values';
 
-axios.defaults.baseURL = SERVER_URL;
+axios.defaults.baseURL = API_URL;
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 
 export const getAuthUrl = (): string => {

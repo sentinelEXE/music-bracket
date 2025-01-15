@@ -96,6 +96,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build/index.html'));
 });
 
+app.options('*', cors());
+
 const API_PORT = 3001;
 const HOST = process.env.HOST;
 

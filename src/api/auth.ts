@@ -2,7 +2,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-//axios.defaults.baseURL = API_URL;
+axios.defaults.baseURL = API_URL;
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 
 export const getAuthUrl = (): string => {

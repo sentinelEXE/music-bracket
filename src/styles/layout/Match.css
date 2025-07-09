@@ -13,7 +13,7 @@
 }
 
 .match-box {
-  border: 1px solid white;
+  border: 1px solid black;
   padding: 10px;
   margin: 10px;
   min-width: 150px;
@@ -24,6 +24,11 @@
   align-items: center;
   box-sizing: border-box;
   word-wrap: break-word;
+  background: linear-gradient(160deg, #390397, #4b4bec, #6d8bb9);
+}
+
+.winner {
+  font-weight: bold;
 }
 
 .match-link {

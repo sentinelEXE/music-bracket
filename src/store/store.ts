@@ -20,10 +20,10 @@ export const selectMatchById = (state: AppState, matchId: string | undefined): M
   return state.bracket?.matches.find((match) => match.id === matchId);
 };
 
-export const selectWinningSong = (state: AppState): Song | null=> {
+export const selectWinningSong = (state: AppState): Song | null => {
   const championshipMatch = selectMatchById(state, state.bracket?.championshipMatchId);
   if (!championshipMatch || championshipMatch.matchState === MatchState.Undecided) { return null; }
-  const winningSong =  championshipMatch.matchState === MatchState.Song0Wins ? championshipMatch.songs[0] : championshipMatch.songs[1];
+  const winningSong = championshipMatch.matchState === MatchState.Song0Wins ? championshipMatch.songs[0] : championshipMatch.songs[1];
   return winningSong;
 };
 
@@ -90,7 +90,7 @@ const rootReducer = (state = initialState, action: any): AppState => {
     case SET_BRACKET_TITLE:
       return { ...state, bracketName: action.payload };
     case SET_SELECTED_ROUND:
-      return {...state, selectedRound: action.payload };
+      return { ...state, selectedRound: action.payload };
     case UPDATE_MATCH_STATE:
       const { matchId, matchState } = action.payload;
       return updateMatchStateHelper(state, matchId, matchState);

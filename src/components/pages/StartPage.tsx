@@ -15,138 +15,138 @@ import { fetchPlaylistSongs } from '../../api/fetch-playlist-songs';
 import '../../styles/pages/StartPage.css';
 
 enum BracketBuildState {
-    NOT_BUILT,
-    BUILDING,
-    BUILT,
+  NOT_BUILT,
+  BUILDING,
+  BUILT,
 }
 
 export const StartPage: React.FC = () => {
-    const accessToken = localStorage.getItem('access_token');
-    const dispatch = useDispatch();
-    const [title, setTitle] = useState<string>('');
-    const [contestantNumber, setContestantNumber] = useState<number>(0);
-    const [playlists, setPlaylists] = useState<any[]>([]);
-    const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>();
+  const accessToken = localStorage.getItem('access_token');
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState<string>('');
+  const [contestantNumber, setContestantNumber] = useState<number>(0);
+  const [playlists, setPlaylists] = useState<any[]>([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>();
 
-    const navigate = useNavigate();
-    const hasFetchedPlaylists = useRef(false);
-    const [isBracketBuilt, setIsBracketBuilt] = useState(BracketBuildState.NOT_BUILT);
+  const navigate = useNavigate();
+  const hasFetchedPlaylists = useRef(false);
+  const [isBracketBuilt, setIsBracketBuilt] = useState(BracketBuildState.NOT_BUILT);
 
-    const { execute: executeFetchPlaylists } = useAsync<any[]>({
-        fetchFunction: fetchPlaylists,
-        params: [accessToken],
-        onSuccess: (data) => {
-          setPlaylists(data);
-        },
-        onFailure: (error) => {
-          console.error(ERRORS.FETCH_PLAYLISTS_ERROR, error);
-        },
-        loaded: playlists.length > 0,
-    });
+  const { execute: executeFetchPlaylists } = useAsync<any[]>({
+    fetchFunction: fetchPlaylists,
+    params: [accessToken],
+    onSuccess: (data) => {
+      setPlaylists(data);
+    },
+    onFailure: (error) => {
+      console.error(ERRORS.FETCH_PLAYLISTS_ERROR, error);
+    },
+    loaded: playlists.length > 0,
+  });
 
-    useEffect(() => {
-        if (accessToken && !hasFetchedPlaylists.current) {
-            executeFetchPlaylists();
-            hasFetchedPlaylists.current = true;
-        }
-    }, [accessToken, executeFetchPlaylists]);
+  useEffect(() => {
+    if (accessToken && !hasFetchedPlaylists.current) {
+      executeFetchPlaylists();
+      hasFetchedPlaylists.current = true;
+    }
+  }, [accessToken, executeFetchPlaylists]);
 
-    const { execute: executeFetchPlaylist } = useAsync<Song[]>({
-        fetchFunction: fetchPlaylistSongs,
-        params: [selectedPlaylist?.id, accessToken],
-        onSuccess: (data) => {
-            if (data && data.length > 0 && contestantNumber > 0) {
-                const songs = getRandomSongs(data, contestantNumber)
-                dispatch(storeSongs(songs));
-                buildBracket(songs, title, contestantNumber);
-                setIsBracketBuilt(BracketBuildState.BUILT);
-            }
-        },
-    });
-  
-    const buildBracket = useBuildBracket();
+  const { execute: executeFetchPlaylist } = useAsync<Song[]>({
+    fetchFunction: fetchPlaylistSongs,
+    params: [selectedPlaylist?.id, accessToken],
+    onSuccess: (data) => {
+      if (data && data.length > 0 && contestantNumber > 0) {
+        const songs = getRandomSongs(data, contestantNumber)
+        dispatch(storeSongs(songs));
+        buildBracket(songs, title, contestantNumber);
+        setIsBracketBuilt(BracketBuildState.BUILT);
+      }
+    },
+  });
 
-    const handleGenerateBracket = useCallback(() => {
-        if (selectedPlaylist) {
-            setIsBracketBuilt(BracketBuildState.BUILDING);
-            dispatch(storeSelectedPlaylist(selectedPlaylist));
-            dispatch(storeContestantNumber(contestantNumber));
-            dispatch(storeBracketTitle(title));
-            executeFetchPlaylist();
-        }
-    }, [dispatch, executeFetchPlaylist, selectedPlaylist, contestantNumber, title]);
-    
-    const handlePlaylistChange = (playlist: Playlist) => {
-        setSelectedPlaylist(playlist);
-    };
+  const buildBracket = useBuildBracket();
 
-    const errorMessage = useMemo(() => {
-        if (!title) {
-            return ERRORS.NO_TITLE;
-        } else if (selectedPlaylist?.tracks && selectedPlaylist.tracks.total < contestantNumber) {
-            return ERRORS.NOT_ENOUGH_SONGS;
-        } else if (!contestantNumber || contestantNumber < 2) {
-            return ERRORS.NO_CONTESTANTS;
-        } else if (!selectedPlaylist) {
-            return ERRORS.NO_PLAYLIST_SELECTED;
-        } else {
-            return "";
-        }
-    }, [title, selectedPlaylist, contestantNumber]);
+  const handleGenerateBracket = useCallback(() => {
+    if (selectedPlaylist) {
+      setIsBracketBuilt(BracketBuildState.BUILDING);
+      dispatch(storeSelectedPlaylist(selectedPlaylist));
+      dispatch(storeContestantNumber(contestantNumber));
+      dispatch(storeBracketTitle(title));
+      executeFetchPlaylist();
+    }
+  }, [dispatch, executeFetchPlaylist, selectedPlaylist, contestantNumber, title]);
 
-    const handleLogin = () => {
-        window.location.href = getAuthUrl();
-    };
+  const handlePlaylistChange = (playlist: Playlist) => {
+    setSelectedPlaylist(playlist);
+  };
 
-    useEffect(() => {
-        if (isBracketBuilt === BracketBuildState.BUILT) {
-            navigate('/bracket');
-        }
-    }, [isBracketBuilt, navigate]);
+  const errorMessage = useMemo(() => {
+    if (!title) {
+      return ERRORS.NO_TITLE;
+    } else if (selectedPlaylist?.tracks && selectedPlaylist.tracks.total < contestantNumber) {
+      return ERRORS.NOT_ENOUGH_SONGS;
+    } else if (!contestantNumber || contestantNumber < 2) {
+      return ERRORS.NO_CONTESTANTS;
+    } else if (!selectedPlaylist) {
+      return ERRORS.NO_PLAYLIST_SELECTED;
+    } else {
+      return "";
+    }
+  }, [title, selectedPlaylist, contestantNumber]);
 
-    return (
-        <div className='StartPage'>
-            <h1>{STRINGS.START_PAGE.TITLE}</h1>
-            <p className='instructions'>{STRINGS.START_PAGE.INSTRUCTIONS}</p>
-            {!accessToken ? (
-                <button onClick={handleLogin}>{STRINGS.START_PAGE.LOGIN_WITH_SPOTIFY}</button>
-            ) : 
-            (<div className='inputs'>
-                <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Bracket title'/>
-                <br/>
-                <select 
-                    value={contestantNumber || ""} 
-                    onChange={(e) => setContestantNumber(Number(e.target.value))}
-                >
-                    <option value="" disabled>{STRINGS.START_PAGE.SELECT_NUMBER_OF_SONGS}</option>
-                    {VALUES.CONTESTANT_VALUES.map(num => (
-                        <option key={num} value={num}>{num}</option>
-                    ))}
-                </select>
-                <br/>
-                <select 
-                    id="playlist"
-                    value={selectedPlaylist?.id || ""} 
-                    onChange={(e) => {
-                        const playlist = playlists.find(p => p.id === e.target.value);
-                        if (playlist) handlePlaylistChange(playlist);
-                    }}
-                >
-                    <option value="" disabled>{STRINGS.START_PAGE.SELECT_PLAYLIST}</option>
-                    {playlists.map(playlist => (
-                        <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
-                    ))}
-                </select>
-                <br/>
-                {errorMessage && <p>{errorMessage}</p>}
-                <br/>
-                <button disabled={errorMessage !== ""} onClick={handleGenerateBracket}>
-                    {isBracketBuilt === BracketBuildState.BUILDING ? 
-                    <><div className='spinner'/><div className='btnText'>{STRINGS.START_PAGE.LOADING_BRACKET}</div></>
-                    : 
-                    <>{STRINGS.START_PAGE.GENERATE_BRACKET}</>}
-                </button>
-            </div>)}
-        </div>
-    )
+  const handleLogin = () => {
+    window.location.href = getAuthUrl();
+  };
+
+  useEffect(() => {
+    if (isBracketBuilt === BracketBuildState.BUILT) {
+      navigate('/bracket');
+    }
+  }, [isBracketBuilt, navigate]);
+
+  return (
+    <div className='StartPage'>
+      <h1>{STRINGS.START_PAGE.TITLE}</h1>
+      <p className='instructions'>{STRINGS.START_PAGE.INSTRUCTIONS}</p>
+      {!accessToken ? (
+        <button onClick={handleLogin}>{STRINGS.START_PAGE.LOGIN_WITH_SPOTIFY}</button>
+      ) :
+        (<div className='inputs'>
+          <input type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder='Bracket title' />
+          <br />
+          <select
+            value={contestantNumber || ""}
+            onChange={(e) => setContestantNumber(Number(e.target.value))}
+          >
+            <option value="" disabled>{STRINGS.START_PAGE.SELECT_NUMBER_OF_SONGS}</option>
+            {VALUES.CONTESTANT_VALUES.map(num => (
+              <option key={num} value={num}>{num}</option>
+            ))}
+          </select>
+          <br />
+          <select
+            id="playlist"
+            value={selectedPlaylist?.id || ""}
+            onChange={(e) => {
+              const playlist = playlists.find(p => p.id === e.target.value);
+              if (playlist) handlePlaylistChange(playlist);
+            }}
+          >
+            <option value="" disabled>{STRINGS.START_PAGE.SELECT_PLAYLIST}</option>
+            {playlists.map(playlist => (
+              <option key={playlist.id} value={playlist.id}>{playlist.name}</option>
+            ))}
+          </select>
+          <br />
+          {errorMessage && <p>{errorMessage}</p>}
+          <br />
+          <button disabled={errorMessage !== ""} onClick={handleGenerateBracket}>
+            {isBracketBuilt === BracketBuildState.BUILDING ?
+              <><div className='spinner' /><div className='btnText'>{STRINGS.START_PAGE.LOADING_BRACKET}</div></>
+              :
+              <>{STRINGS.START_PAGE.GENERATE_BRACKET}</>}
+          </button>
+        </div>)}
+    </div>
+  )
 };

@@ -7,7 +7,8 @@ import { storeSelectedRound } from '../../store/store';
 import { STRINGS } from '../../constants/strings';
 import "../../styles/pages/BracketPage.css";
 
-export const BracketPage: React.FC = () => {;
+export const BracketPage: React.FC = () => {
+  ;
   const dispatch = useDispatch()
   const bracket = useSelector((state: AppState) => state.bracket);
   const selectedRound = useSelector((state: AppState) => state.selectedRound);
@@ -31,11 +32,11 @@ export const BracketPage: React.FC = () => {;
               </button>
             ))}
           </div>
-          <Bracket matches={bracket.matches} selectedRound={selectedRound}/>
+          <Bracket matches={bracket.matches} selectedRound={selectedRound} />
         </>
       ) : (
         <p>No playlist selected</p>
       )}
-  </div>
+    </div>
   );
 };

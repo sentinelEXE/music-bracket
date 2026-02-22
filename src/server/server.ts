@@ -100,7 +100,7 @@ app.post('/api/refresh_token', async (req: Request<{}, {}, RefreshTokenRequestBo
 
 app.use(express.static(path.join(__dirname, '../../build')));
 
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, '../../build/index.html'));
 });
 

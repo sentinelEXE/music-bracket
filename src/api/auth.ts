@@ -2,15 +2,15 @@
 import axios from 'axios';
 import qs from 'qs';
 
-axios.defaults.baseURL = API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 const AUTH_URL = 'https://accounts.spotify.com/authorize';
 
 export const getAuthUrl = (): string => {
     const scopes = 'streaming user-read-private user-read-email playlist-modify-public user-modify-playback-state';
     return `${AUTH_URL}?${qs.stringify({
         response_type: 'code',
-        client_id: CLIENT_ID,
-        redirect_uri: REDIRECT_URI,
+        client_id: import.meta.env.VITE_CLIENT_ID,
+        redirect_uri: import.meta.env.VITE_REDIRECT_URI,
         scope: scopes,
     })}`;
 };
